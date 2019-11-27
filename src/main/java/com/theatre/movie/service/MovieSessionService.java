@@ -3,11 +3,14 @@ package com.theatre.movie.service;
 
 import com.theatre.movie.dto.BookedSeatViewDto;
 import com.theatre.movie.dto.MovieSessionTimeViewDto;
+import com.theatre.movie.dto.MovieSessionViewDto;
 import com.theatre.movie.dto.MovieSessionsScheduleViewDto;
+import com.theatre.movie.entity.Hall;
 import com.theatre.movie.entity.Movie;
 import com.theatre.movie.entity.MovieSession;
 import com.theatre.movie.entity.Seat;
 import com.theatre.movie.exception.InvalidScheduleDateException;
+import com.theatre.movie.repository.BookingRepository;
 import com.theatre.movie.repository.MovieRepository;
 import com.theatre.movie.repository.MovieSessionRepository;
 import lombok.AllArgsConstructor;
@@ -31,25 +34,24 @@ public class MovieSessionService {
     private static final Logger LOG = LoggerFactory.getLogger(MovieSessionService.class);
 
     private MovieSessionRepository movieSessionRepo;
-    //    private BookingDao bookingDao;
-//    private HallDao hallDao;
-    private MovieRepository movieRepo;
+    private BookingRepository bookingRepo;
 
-//    public MovieSessionViewDto getMovieSessionById(int id) {
-//        MovieSession movieSession = movieSessionRepo.getById(id);
-//        Set<Integer> bookedSeats = bookingDao.getAllBookedSeatsIdByMovieSessionId(movieSession.getSessionId());
-//        Hall hall = hallDao.getHallById(movieSession.getHallId());
-//        Movie movie = movieRepo.getById(movieSession.getMovieId());
-//        Map<Integer, List<BookedSeatViewDto>> seats = mapBookedSeats(hall.getSeats(), bookedSeats);
-//        MovieSessionViewDto dto = new MovieSessionViewDto(
-//                movieSession,
-//                movie.getTitle(),
-//                movie.getDurationMinutes(),
-//                hall.getHallName(), seats
-//        );
-//        dto.setBookedSeatsCount(bookedSeats.size());
-//        return dto;
-//    }
+    public MovieSessionViewDto getMovieSessionById(int id) {
+        MovieSession movieSession = movieSessionRepo.findById(id).get();
+        Set<Integer> bookedSeats = bookingRepo.getAllBookedSeatsIdByMovieSessionId(id);
+        LOG.info("Extracted bookedSeats id: {}", bookedSeats);
+        Hall hall = movieSession.getHall();
+        Movie movie = movieSession.getMovie();
+        Map<Integer, List<BookedSeatViewDto>> seats = mapBookedSeats(hall.getSeats(), bookedSeats);
+        MovieSessionViewDto dto = new MovieSessionViewDto(
+                movieSession,
+                movie.getTitle(),
+                movie.getDurationMinutes(),
+                hall.getHallName(), seats
+        );
+        dto.setBookedSeatsCount(bookedSeats.size());
+        return dto;
+    }
 
     public List<MovieSessionsScheduleViewDto> getMovieSessionsScheduleForDate(LocalDate date)
             throws InvalidScheduleDateException {

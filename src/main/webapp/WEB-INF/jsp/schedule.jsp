@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <jsp:useBean id="sessions" scope="request" type="java.util.List"/>
 <jsp:useBean id="menuDates" scope="request" type="java.util.List"/>
@@ -23,7 +24,7 @@
                 <c:forEach items="${menuDates}" var="menuDate">
                     <li <c:if test="${menuDate.isActive()}">class="active"</c:if>>
                         <a href="schedule${menuDate.getIsoDate()}">
-                            <fmt:message key="week.day.${menuDate.getDayOfWeek()}"/>
+                            <spring:message code="week.day.${menuDate.getDayOfWeek()}"/>
                                 ${menuDate.getFormattedDate()}</a></li>
                 </c:forEach>
             </ul>
@@ -59,8 +60,8 @@
                         <div class="movie-description">
                             <div class="movie-title">${session.title}</div>
                             <p class="movie-duration">
-                                <fmt:message key="schedule.duration"/>:
-                                    ${session.duration}<fmt:message key="schedule.min"/>
+                                <spring:message code="schedule.duration"/>:
+                                    ${session.duration}<spring:message code="schedule.min"/>
                             </p>
 
                             <c:forEach items="${session.movieSessionTimes}" var="time">
