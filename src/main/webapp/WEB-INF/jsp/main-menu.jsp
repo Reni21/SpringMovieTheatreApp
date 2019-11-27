@@ -44,10 +44,10 @@
                             <ul class="first-lvl__lang-menu">
                                 <div>locale is ${pageContext.response.locale}</div>
                                 <li <c:if test="${pageContext.response.locale == 'en'}">class="active"</c:if>>
-                                    <a href="?locale=en">EN</a>
+                                    <a href="?locale=en<c:if test="${param.get('date') != null}">&date=${param.get('date')}</c:if>">EN</a>
                                 </li>
                                 <li <c:if test="${pageContext.response.locale == 'ru'}">class="active"</c:if>>
-                                    <a href="?locale=ru">RU</a>
+                                    <a href="?locale=ru<c:if test="${param.get('date') != null}">&date=${param.get('date')}</c:if>">RU</a>
                                 </li>
 
                             </ul>
