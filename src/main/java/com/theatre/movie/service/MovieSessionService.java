@@ -62,13 +62,13 @@ public class MovieSessionService {
         LOG.info("Sessions search start from: " + searchFrom + " to: " + searchTo);
         List<MovieSession> sessions = movieSessionRepo.getAllInRange(
                 searchFrom, searchTo);
-        Map<Integer, List<MovieSession>> sessionsByMovie = sessions.stream()
-                .collect(Collectors.groupingBy(MovieSession::getMovieId));
+        sessions.forEach(System.out::println);
+        Map<Movie, List<MovieSession>> sessionsByMovie = sessions.stream()
+                .collect(Collectors.groupingBy(MovieSession::getMovie));
 
         return sessionsByMovie.entrySet().stream()
                 .map(movieListEntry -> {
-                    Integer movieId = movieListEntry.getKey();
-                    Movie movie = movieRepo.findById(movieId).get();
+                    Movie movie = movieListEntry.getKey();
                     MovieSessionsScheduleViewDto scheduleDto = new MovieSessionsScheduleViewDto(movie.getTitle(), movie.getDurationMinutes());
                     scheduleDto.setTrailerUrl(movie.getTrailerUrl());
                     scheduleDto.setBackgroundImgPath(movie.getBackgroundImgUrl());

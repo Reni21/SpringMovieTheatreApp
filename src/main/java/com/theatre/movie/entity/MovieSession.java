@@ -21,11 +21,13 @@ public class MovieSession {
     @Column(name = "session_id")
     private Integer sessionId;
     @NonNull
-    @Column(name = "movie_id")
-    private Integer movieId;
+    @ManyToOne
+    @JoinColumn(name = "movie_id", referencedColumnName = "movie_id")
+    private Movie movie;
     @NonNull
-    @Column(name = "hall_id")
-    private Integer hallId;
+    @ManyToOne
+    @JoinColumn(name = "hall_id", referencedColumnName = "hall_id")
+    private Hall hall;
     @NonNull
     @Column(name = "start_at")
     private LocalDateTime startAt;

@@ -1,4 +1,4 @@
-package com.theatre.movie;
+package com;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
