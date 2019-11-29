@@ -11,9 +11,13 @@
 <html lang="en">
     <head>
         <title>${movieSession.movieTitle}</title>
-        <c:import url="head-data.jsp"/>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap"
+              rel="stylesheet">
+        <!-- Common css -->
+        <link rel="stylesheet" type="text/css" href="/css/common-styles.css">
         <!-- Unique css -->
-        <link rel="stylesheet" type="text/css" href="css/booking-styles.css">
+        <link rel="stylesheet" type="text/css" href="/css/booking-styles.css">
 
     </head>
     <body>
@@ -44,7 +48,7 @@
                     <div class="hall-title">${session.getFormattedDate()} ${session.getFormattedTime()} <img
                             class="clock"
                             aria-hidden="true"
-                            src="static/img/clock.png"
+                            src="/img/clock.png"
                             alt="Italian"
                             height="20"> ${session.movieDuration}
                         <fmt:message key="schedule.min"/></div>
@@ -125,7 +129,7 @@
         </main>
         <c:if test="${user == null || user.getRole().toString() == 'ROLE_USER'}">
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-            <script type="text/javascript" src="js/script.js"></script>
+            <script type="text/javascript" src="/js/script.js"></script>
         </c:if>
     </body>
 </html>
