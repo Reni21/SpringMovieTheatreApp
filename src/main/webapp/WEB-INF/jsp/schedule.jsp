@@ -1,7 +1,7 @@
 <!doctype html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <jsp:useBean id="sessions" scope="request" type="java.util.List"/>
@@ -71,7 +71,6 @@
                     </div>
                 </div>
             </c:forEach>
-
         </main>
     </body>
 </html>
