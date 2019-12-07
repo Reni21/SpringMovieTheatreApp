@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class MovieSessionController {
     private MovieSessionService movieSessionService;
 
     @GetMapping("{movieSessionId}")
-    public String getSchedulePage(@PathVariable Integer movieSessionId, Model model) {
+    public String getMovieSessionPage(@PathVariable Integer movieSessionId, Model model) {
         LOG.info("PathVariable movieSessionId={}", movieSessionId);
         model.addAttribute("activeTab", "null");
         List<MenuDateViewDto> menuDates = weekScheduleDatesService.getWeekScheduleDates(LocalDate.now());
@@ -36,5 +37,10 @@ public class MovieSessionController {
         model.addAttribute("movieSession", movieSession);
         LOG.info("Extracted movie session:\n{}", movieSession);
         return "seats-booking";
+    }
+
+    @PostMapping
+    public String createMovieSession(){
+        return null;
     }
 }

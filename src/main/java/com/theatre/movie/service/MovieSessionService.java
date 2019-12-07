@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ public class MovieSessionService {
     private MovieSessionRepository movieSessionRepo;
     private BookingRepository bookingRepo;
 
+    @Transactional
     public MovieSessionViewDto getMovieSessionById(int id) {
         MovieSession movieSession = movieSessionRepo.findById(id).get();
         Set<Integer> bookedSeats = bookingRepo.getAllBookedSeatsIdByMovieSessionId(id);
@@ -77,6 +79,7 @@ public class MovieSessionService {
                     scheduleDto.setCoverImgPath(movie.getCoverImgUrl());
                     List<MovieSessionTimeViewDto> timeDtos = mapMovieSessionTimeDtos(movieListEntry.getValue());
                     scheduleDto.setMovieSessionTimes(timeDtos);
+                    scheduleDto.setMovieId(movie.getMovieId());
                     return scheduleDto;
                 }).collect(Collectors.toList());
     }

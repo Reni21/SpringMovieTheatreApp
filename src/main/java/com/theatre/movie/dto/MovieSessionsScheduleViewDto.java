@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Setter
 @Getter
 @EqualsAndHashCode
 @ToString
 public class MovieSessionsScheduleViewDto {
+    private Integer movieId;
     @NonNull
     private String title;
     @NonNull

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class BookingService {
         }
     }
 
+    @Transactional
     public List<BookingViewDto> getActualUsersBookingById(String username) {
         LOG.info("Get actual booking for user username=" + username);
         User user = userRepo.findByUsername(username);
@@ -49,16 +51,7 @@ public class BookingService {
         LOG.info("Extracted bookings:\n{}", bookings);
         List<BookingViewDto> dtos = new ArrayList<>();
         bookings.forEach(booking -> {
-            MovieSession movieSession = booking.getMovieSession();
-            Movie movie = booking.getMovieSession().getMovie();
-            Seat seat = booking.getBookedSeat();
-            BookingViewDto dto = new BookingViewDto(
-                    booking.getBookingId(),
-                    movie.getTitle(),
-                    movie.getDurationMinutes(),
-                    movieSession.getStartAt(),
-                    movieSession.getHall().getHallName(),
-                    seat.getRow(), seat.getPlace());
+            BookingViewDto dto = mapBookingViewDto(booking);
             dtos.add(dto);
 
         });

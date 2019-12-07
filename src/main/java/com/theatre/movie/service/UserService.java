@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -23,6 +24,7 @@ public class UserService {
         return userRepo.findByUsername(username);
     }
 
+    @Transactional
     public User registerUser(SignUpForm signUpForm, Role role) throws UserAlreadyExistException {
         validateUserRequest(signUpForm);
         //todo: add pass hashing
