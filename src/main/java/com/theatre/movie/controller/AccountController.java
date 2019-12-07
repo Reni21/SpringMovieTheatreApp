@@ -29,7 +29,7 @@ public class AccountController {
         User user = userService.getByUsername(username);
         LOG.info("Enter to account for user: {}", user);
         if (user == null) {
-            return "login";
+            return "error-404";
         }
         return "account";
     }

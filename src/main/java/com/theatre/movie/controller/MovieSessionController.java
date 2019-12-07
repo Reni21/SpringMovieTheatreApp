@@ -27,15 +27,14 @@ public class MovieSessionController {
 
     @GetMapping("{movieSessionId}")
     public String getSchedulePage(@PathVariable Integer movieSessionId, Model model) {
-        LOG.info("PathVariable movieSessionId=" + movieSessionId);
+        LOG.info("PathVariable movieSessionId={}", movieSessionId);
         model.addAttribute("activeTab", "null");
         List<MenuDateViewDto> menuDates = weekScheduleDatesService.getWeekScheduleDates(LocalDate.now());
         model.addAttribute("menuDates", menuDates);
 
         MovieSessionViewDto movieSession = movieSessionService.getMovieSessionById(movieSessionId);
         model.addAttribute("movieSession", movieSession);
-        LOG.info("Extracted movie session:\n" + movieSession);
-
+        LOG.info("Extracted movie session:\n{}", movieSession);
         return "seats-booking";
     }
 }

@@ -8,9 +8,6 @@ function validateLoginForm() {
 }
 
 $(document).ready(function () {
-    jQuery.validator.addMethod("match", function(value, element, param) {
-        return value.match(new RegExp("." + param + "$"));
-    });
 
     $('#signUpForm').validate({ // initialize the plugin
         rules: {
@@ -55,9 +52,6 @@ $(document).ready(function () {
         return false;
     }
 });
-window.onclick = function () {
-    var errorsP = $('p.errors');
-    if (errorsP.text().length !== 0) {
-        errorsP.html('');
-    }
-};
+jQuery.validator.addMethod("match", function(value, element, param) {
+    return value.match(new RegExp("." + param + "$"));
+});

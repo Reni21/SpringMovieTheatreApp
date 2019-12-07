@@ -55,8 +55,7 @@
                             <div class="screen"><p>SCREEN</p></div>
                             <c:set value="${movie.bookedSeats}" var="bookedSeats"/>
                             <div id="session_price" value="${movie.price}"></div>
-                            <form id="selectedSeats" method="post" action="booking">
-                                <input type="hidden" name="movieSessionId" value="${movie.sessionId}">
+                            <form id="selectedSeats" method="post" action="/booking/${movie.sessionId}">
                                 <c:forEach items="${bookedSeats.entrySet()}" var="entrySetSeats">
                                 <div class="seatRow">
                                     <div class="seatRowNumber">Row ${entrySetSeats.getKey()}</div>
@@ -65,7 +64,7 @@
                                          role="checkbox"
                                          aria-checked="false" focusable="true"
                                          tabindex="-1"
-                                         class="seatNumber <c:if test="${seat.isBooked()}">seatUnavailable"
+                                         class="seatNumber <c:if test="${seat.isBooked()}">seatUnavailable
                                     </c:if>">
                                         ${seat.place}
                                 </div>

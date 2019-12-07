@@ -39,14 +39,15 @@ public class ScheduleController {
                                   Model model) {
         LOG.info("Get for /schedule");
         if (date == null) {
-            LOG.info("Date param is null. Send redirect.");
-            return "redirect:schedule?date=" + LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+            String url = "schedule?date=" + LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+            LOG.info("Date param is null. Send redirect to url: {}",url);
+            return "redirect:" + url;
         }
         try {
             List<MovieSessionsScheduleViewDto> currentDaySessions = movieSessionService.getMovieSessionsScheduleForDate(date);
             List<MenuDateViewDto> menuDates = weekScheduleDatesService.getWeekScheduleDates(date);
 
-            LOG.info("Current day sessions number: " + currentDaySessions.size() + "\n" + currentDaySessions);
+            LOG.info("Current day sessions number: {}\n{}",currentDaySessions.size(), currentDaySessions);
             model.addAttribute("menuDates", menuDates);
             model.addAttribute("sessions", currentDaySessions);
             model.addAttribute("activeTab", "schedule");
@@ -56,7 +57,7 @@ public class ScheduleController {
             }
             return "schedule";
         } catch (InvalidScheduleDateException e) {
-            LOG.warn("Get movie schedule request failed: " + e.getMessage());
+            LOG.warn("Get movie schedule request failed: {}", e.getMessage());
             return "404-error";
         }
     }

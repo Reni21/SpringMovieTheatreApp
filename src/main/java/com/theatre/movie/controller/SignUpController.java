@@ -40,8 +40,9 @@ public class SignUpController {
         if (error.hasErrors()){
             return "sign-up";
         }
+        User user = null;
         try {
-            User user = userService.registerUser(signUpForm, Role.ROLE_USER);
+            user = userService.registerUser(signUpForm, Role.ROLE_USER);
         } catch (UserAlreadyExistException ex){
             String msg = ex.getMessage();
             error.rejectValue(msg.substring(0, msg.indexOf(" ")),

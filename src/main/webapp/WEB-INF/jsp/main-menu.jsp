@@ -39,7 +39,7 @@
                                 </c:if>
 
                                 <li <c:if test="${name == 'account'}">class="active"</c:if>>
-                                    <a href="${user == null ? 'login' : 'account/'.concat(user.getUsername())}">
+                                    <a href="${user == null ? '/login' : '/account/'.concat(user.getUsername())}">
                                         <spring:message code="main.menu.account"/></a>
                                 </li>
 
