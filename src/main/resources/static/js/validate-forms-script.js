@@ -7,18 +7,57 @@ function validateLoginForm() {
     }
 }
 
-function validateSignUpForm() {
-    var username = document.forms["signUpForm"]["username"].value;
-    var password = document.forms["signUpForm"]["password"].value;
-    var email = document.forms["signUpForm"]["email"].value;
-    if (validateField(username) || validateField(password) || validateField(email)) {
-        alert("Please fill all required field");
+$(document).ready(function () {
+    jQuery.validator.addMethod("match", function(value, element, param) {
+        return value.match(new RegExp("." + param + "$"));
+    });
+
+    $('#signUpForm').validate({ // initialize the plugin
+        rules: {
+            username: {
+                required: true,
+                maxlength: 15,
+                match: "[a-zA-Z0-9]+"
+            },
+            password: {
+                required: true,
+                minlength: 5,
+                maxlength: 20
+            },
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            username: {
+                required: "| " + "Username field is required",
+                maxlength: jQuery.validator.format("| Max number of characters is 15"),
+                match:  "| " + "Use only english alphabet and numbers"
+            },
+            password: {
+                required: "| " + "Password by field is required",
+                minlength: jQuery.validator.format("| Min number of characters for password is 5"),
+                maxlength: jQuery.validator.format("| Max number of characters is 15")
+            },
+            email: {
+                required: "| " + "Email field is required",
+                email: jQuery.validator.format("| Input correct email")
+            },
+        },
+        errorPlacement: function (error, element) {
+            var placement = $(element).data('error');
+            $('#err_' + placement).html(error);
+        }
+    });
+
+    if (!form.valid()) {
         return false;
     }
-}
-
-function validateField(field) {
-    if (field == null || field == "") {
-        return true;
+});
+window.onclick = function () {
+    var errorsP = $('p.errors');
+    if (errorsP.text().length !== 0) {
+        errorsP.html('');
     }
-}
+};

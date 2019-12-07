@@ -24,12 +24,13 @@ public class AccountController {
     @GetMapping("{username}")
     public String getAccountPage(@PathVariable String username, Model model) {
         LOG.info("PathVariable username=" + username);
+        model.addAttribute("activeTab", "account");
 
         User user = userService.getByUsername(username);
+        LOG.info("Enter to account for user: {}", user);
         if (user == null) {
-            throw new UsernameNotFoundException("User with " + username + " is not found");
+            return "login";
         }
-        model.addAttribute("activeTab", "account");
         return "account";
     }
 }

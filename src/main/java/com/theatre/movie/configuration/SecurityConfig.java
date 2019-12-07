@@ -66,7 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             AuthUser authUser = new AuthUser(authentication.getName(), role);
             req.getSession().setAttribute("user", authUser);
             resp.sendRedirect("/account/" + authentication.getName());
-
         };
     }
 

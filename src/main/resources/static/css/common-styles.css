@@ -147,3 +147,8 @@ Second level nav bar
 	top: 0;
 	width: 100%;
 }
+.errors{
+	text-align: left;
+	color: red;
+	margin: 0 0 10px 0;
+}

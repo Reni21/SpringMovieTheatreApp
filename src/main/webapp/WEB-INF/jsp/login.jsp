@@ -43,9 +43,13 @@
                                    required=""/>
 
                             <c:if test="${param.error != null}">
-                                <h4 style="text-align: center; color: red">
+                                <p class="errors">
                                     <spring:message code="error.login.badcredentials"></spring:message>
-                                </h4>
+                                </p>
+                            </c:if>
+
+                            <c:if test="${param.msg != null}">
+                                <h4 style="text-align: center; color: green">You registered successfully. Pleas log in in to your account.</h4>
                             </c:if>
 
                             <!-- Button -->
