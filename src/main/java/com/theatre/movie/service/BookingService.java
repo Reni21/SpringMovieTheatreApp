@@ -1,8 +1,7 @@
 package com.theatre.movie.service;
 
-import com.theatre.movie.entity.Booking;
-import com.theatre.movie.entity.Seat;
-import com.theatre.movie.entity.User;
+import com.theatre.movie.dto.BookingViewDto;
+import com.theatre.movie.entity.*;
 import com.theatre.movie.form.BookedSeatsForm;
 import com.theatre.movie.form.dto.CreateBookingDto;
 import com.theatre.movie.repository.BookingRepository;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -42,8 +42,39 @@ public class BookingService {
         }
     }
 
-//    public List<BookingViewDto> getActualUsersBookingById(int userId) {
-//        LOG.info("Get actual booking for user id=" + userId);
-//        return bookingRepo.getAllActualBookingByUserId(userId);
-//    }
+    public List<BookingViewDto> getActualUsersBookingById(String username) {
+        LOG.info("Get actual booking for user username=" + username);
+        User user = userRepo.findByUsername(username);
+        List<Booking> bookings = bookingRepo.getAllActualBookingByUserId(user.getId());
+        LOG.info("Extracted bookings:\n{}", bookings);
+        List<BookingViewDto> dtos = new ArrayList<>();
+        bookings.forEach(booking -> {
+            MovieSession movieSession = booking.getMovieSession();
+            Movie movie = booking.getMovieSession().getMovie();
+            Seat seat = booking.getBookedSeat();
+            BookingViewDto dto = new BookingViewDto(
+                    booking.getBookingId(),
+                    movie.getTitle(),
+                    movie.getDurationMinutes(),
+                    movieSession.getStartAt(),
+                    movieSession.getHall().getHallName(),
+                    seat.getRow(), seat.getPlace());
+            dtos.add(dto);
+
+        });
+        return dtos;
+    }
+
+    private BookingViewDto mapBookingViewDto(Booking booking){
+        MovieSession movieSession = booking.getMovieSession();
+        Movie movie = booking.getMovieSession().getMovie();
+        Seat seat = booking.getBookedSeat();
+        return new BookingViewDto(
+                booking.getBookingId(),
+                movie.getTitle(),
+                movie.getDurationMinutes(),
+                movieSession.getStartAt(),
+                movieSession.getHall().getHallName(),
+                seat.getRow(), seat.getPlace());
+    }
 }
