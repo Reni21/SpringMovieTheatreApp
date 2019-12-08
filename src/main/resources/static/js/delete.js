@@ -1,11 +1,14 @@
 function removeMovieSessionHandler(movieSessionId) {
-    var sessionsIds = [movieSessionId];
+    var id = parseInt(movieSessionId, 10)
+    var sessionsIds = [id];
     var path = $('#context').val();
     console.log(JSON.stringify(sessionsIds));
     $.ajax({
         type: 'post',
-        url: 'movie-session',
-        data: {sessionsIds: JSON.stringify(sessionsIds)}
+        url: '/delete-session',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(sessionsIds)
     }).done(function (resp) {
         window.location.replace(path + '/schedule');
     }).fail(function (jqXHR) {

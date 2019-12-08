@@ -33,8 +33,7 @@ public class BookingController {
     @PostMapping("/booking/{movieSessionId}")
     public String postSelectedSeats(@PathVariable String movieSessionId,
                                     @ModelAttribute BookedSeatsForm bookedSeatsForm,
-                                    Authentication authentication,
-                                    Model model) {
+                                    Authentication authentication) {
         LOG.info("Book seat for movie session id={}", movieSessionId);
         LOG.info("Form: {}", bookedSeatsForm);
         LOG.info("Authentication: {}", authentication);

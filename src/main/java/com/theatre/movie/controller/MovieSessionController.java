@@ -77,4 +77,5 @@ public class MovieSessionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMsg);
         }
     }
+
 }

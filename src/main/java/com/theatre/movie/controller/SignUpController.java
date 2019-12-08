@@ -1,7 +1,6 @@
 package com.theatre.movie.controller;
 
 import com.theatre.movie.entity.Role;
-import com.theatre.movie.entity.User;
 import com.theatre.movie.exception.UserAlreadyExistException;
 import com.theatre.movie.form.SignUpForm;
 import com.theatre.movie.service.UserService;
@@ -37,13 +36,12 @@ public class SignUpController {
     public String registerNewUser(@Valid @ModelAttribute SignUpForm signUpForm, BindingResult error, Model model) {
         LOG.info("Post form: {}", signUpForm);
         model.addAttribute("activeTab", "account");
-        if (error.hasErrors()){
+        if (error.hasErrors()) {
             return "sign-up";
         }
-        User user = null;
         try {
-            user = userService.registerUser(signUpForm, Role.ROLE_USER);
-        } catch (UserAlreadyExistException ex){
+            userService.registerUser(signUpForm, Role.ROLE_USER);
+        } catch (UserAlreadyExistException ex) {
             String msg = ex.getMessage();
             error.rejectValue(msg.substring(0, msg.indexOf(" ")),
                     msg.substring(msg.indexOf(" ") + 1));

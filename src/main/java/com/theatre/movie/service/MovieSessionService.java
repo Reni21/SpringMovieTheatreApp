@@ -10,6 +10,7 @@ import com.theatre.movie.entity.Movie;
 import com.theatre.movie.entity.MovieSession;
 import com.theatre.movie.entity.Seat;
 import com.theatre.movie.exception.InvalidScheduleDateException;
+import com.theatre.movie.exception.MovieScheduleRemovalException;
 import com.theatre.movie.form.MovieSessionForm;
 import com.theatre.movie.repository.BookingRepository;
 import com.theatre.movie.repository.HallRepository;
@@ -115,7 +116,7 @@ public class MovieSessionService {
     }
 
     @Transactional
-    public MovieSession addMovieSession(MovieSessionForm movieSessionForm, String dateStr, String movieId){
+    public MovieSession addMovieSession(MovieSessionForm movieSessionForm, String dateStr, String movieId) {
         LOG.info("Create new movie session for data: " + movieSessionForm);
 
         LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
@@ -127,6 +128,18 @@ public class MovieSessionService {
                 startAt,
                 movieSessionForm.getPrice());
         return movieSessionRepo.save(movieSession);
+    }
+
+    @Transactional
+    public void deleteMovieSessionByIds(List<Integer> sessionsIds) throws MovieScheduleRemovalException {
+        for (Integer id : sessionsIds) {
+            boolean bookingExists = bookingRepo.isBookingForMovieSessionExist(id);
+            if (bookingExists) {
+                throw new MovieScheduleRemovalException("Movie card can not be deleted. Some sessions already have reservations.");
+            }
+        }
+        sessionsIds.forEach(movieSessionRepo::deleteById);
+
     }
 
 }
