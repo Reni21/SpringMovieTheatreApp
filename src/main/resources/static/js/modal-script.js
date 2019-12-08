@@ -1,7 +1,7 @@
 var moviesToPin = new Map();
-// When the user clicks the button, open the modal
+// Open modal to add movie card for admin-schedule
 $('.openModalBtn').click(function () {
-    // Get all movies from server
+    // Get all movies from server with ajax
     $.get("movies-preview")
         .done(function (resp) {
             var movies = resp;
@@ -9,7 +9,7 @@ $('.openModalBtn').click(function () {
             $.each(movies, function (index, movie) {
                 var mainHtmlId = 'movie_' + movie.movieId;
                 if ($("#" + mainHtmlId).length === 0) {
-                    // Get movie tha can be pined
+                    // Get movie that can be pined
                     var link = '<label class="container">' + movie.title +
                         '<input class="remember" type="checkbox" name="movie_ids" value="' + movie.movieId + '" id="checkbox_' + movie.movieId + '"/>' +
                         '<span class="checkmark"></span></label>';
@@ -35,7 +35,7 @@ $('.close').click(function () {
     moviesToPin.clear();
 });
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside of the modal delete all error msg
 window.onclick = function () {
     var errorsDivs = $('div.errors');
     if (errorsDivs.text().length !== 0) {
@@ -43,16 +43,20 @@ window.onclick = function () {
     }
 };
 
+// Admin-schedule forms handler
 function submitFormHandler(event) {
     var $form = $(this);
     if ($form.attr('id') === 'selectedMovies') {
+
+        // Pin movie card to admin-schedule page without call server 1
         pinMovie($form, event, moviesToPin, submitFormHandler);
-        //reject default handler for submit button
         $('#myModal').css('display', 'none');
         $("#selectedMovies").empty();
         moviesToPin.clear();
     } else {
-        var movieId = $form.find('input[name="movieId"]').val();
+
+        // Create new movie session for selected movie with ajax, validation part 1
+        var movieId = $form.attr('id').split("_")[1];
         $($form).validate({ // initialize the plugin
             rules: {
                 hours: {
@@ -100,15 +104,18 @@ function submitFormHandler(event) {
     }
 }
 
+// Create new movie session for selected movie with ajax 2
 function createAndDisplayNewMovieSession(form, event) {
-    var movieId = form.find('input[name="movieId"]').val();
+    var movieId = form.attr('id').split("_")[1];
+    //reject default handler for submit button
+    event.preventDefault();
 
     $.ajax({
         type: form.attr('method'),
         url: form.attr('action'),
         data: form.serialize()
     }).done(function (resp) {
-        var movieSessionTimeDto = JSON.parse(resp);
+        var movieSessionTimeDto = resp;
         console.log(movieSessionTimeDto);
         form.find('input[name="hours"]').val('');
         form.find('input[name="price"]').val('');
@@ -116,16 +123,28 @@ function createAndDisplayNewMovieSession(form, event) {
         var link = '<a class="tag" href="movie-session/' + movieSessionTimeDto.movieSessionId + '" id="' + movieSessionTimeDto.movieSessionId + '">' + movieSessionTimeDto.timeView + '</a>';
         $('#movie_' + movieId).append($(link));
     }).fail(function (jqXHR) {
-        var msg = jqXHR.responseText;
-        var er = '<span class="error">' + '| ' + msg + '</span>';
-        $('#errors_' + movieId).html(er);
+        var status = jqXHR.status;
+        console.log(status);
+        if (status === 400) {
+            var respText = jqXHR.responseText;
+            var json = JSON.parse(respText);
+            var arrayLength = json.length;
+            for (var i = 0; i < arrayLength; i++) {
+                var msg = json[i];
+                var er = '<span class="error">' + '| ' + msg + '</span>';
+                $('#errors_' + movieId).html(er);
+            }
+        } else {
+            location.href = status + "-error";
+        }
         $('.errors').css('display', 'block');
-        console.log(jqXHR.status + ' ' + jqXHR.responseText);
+        console.log(jqXHR.responseText);
     });
     //reject default handler for submit button
     event.preventDefault();
 }
 
 $(function () {
-    $('com.theatre.movie.form').submit(submitFormHandler);
+    $('#selectedMovies').submit(submitFormHandler);
+    $('form.session-form').submit(submitFormHandler);
 });

@@ -58,7 +58,7 @@ public class ScheduleController {
             return "schedule";
         } catch (InvalidScheduleDateException e) {
             LOG.warn("Get movie schedule request failed: {}", e.getMessage());
-            return "404-error";
+            return "redirect:404-error";
         }
     }
 

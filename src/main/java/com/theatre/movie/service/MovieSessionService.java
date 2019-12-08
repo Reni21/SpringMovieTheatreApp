@@ -10,7 +10,9 @@ import com.theatre.movie.entity.Movie;
 import com.theatre.movie.entity.MovieSession;
 import com.theatre.movie.entity.Seat;
 import com.theatre.movie.exception.InvalidScheduleDateException;
+import com.theatre.movie.form.MovieSessionForm;
 import com.theatre.movie.repository.BookingRepository;
+import com.theatre.movie.repository.HallRepository;
 import com.theatre.movie.repository.MovieRepository;
 import com.theatre.movie.repository.MovieSessionRepository;
 import lombok.AllArgsConstructor;
@@ -36,6 +38,8 @@ public class MovieSessionService {
 
     private MovieSessionRepository movieSessionRepo;
     private BookingRepository bookingRepo;
+    private MovieRepository movieRepo;
+    private HallRepository hallRepo;
 
     @Transactional
     public MovieSessionViewDto getMovieSessionById(int id) {
@@ -109,4 +113,20 @@ public class MovieSessionService {
             return dto;
         }).collect(Collectors.groupingBy(BookedSeatViewDto::getRow));
     }
+
+    @Transactional
+    public MovieSession addMovieSession(MovieSessionForm movieSessionForm, String dateStr, String movieId){
+        LOG.info("Create new movie session for data: " + movieSessionForm);
+
+        LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
+        LocalTime time = LocalTime.of(movieSessionForm.getHours(), movieSessionForm.getMinutes());
+        LocalDateTime startAt = LocalDateTime.of(date, time);
+        MovieSession movieSession = new MovieSession(
+                movieRepo.findById(Integer.parseInt(movieId)).get(),
+                hallRepo.findById(1).get(),
+                startAt,
+                movieSessionForm.getPrice());
+        return movieSessionRepo.save(movieSession);
+    }
+
 }

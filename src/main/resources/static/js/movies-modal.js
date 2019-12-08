@@ -19,6 +19,7 @@ window.onclick = function () {
     }
 };
 
+// Create new movie for admin-movies with ajax, validation part 1
 function submitFormHandler(event) {
     var $form = $(this);
 
@@ -86,13 +87,14 @@ function submitFormHandler(event) {
     createAndDisplayNewMovie($form, event);
 }
 
+// Create new movie for admin-movies with ajax, post part 2
 function createAndDisplayNewMovie(form, event) {
     $.ajax({
         type: form.attr('method'),
         url: form.attr('action'),
         data: form.serialize()
     }).done(function (resp) {
-        var movie = JSON.parse(resp);
+        var movie = JSON.parse(resp); // delete parse json
         console.log(movie);
         $(':input').val('');
         var link = '<div class="movie-card">' +

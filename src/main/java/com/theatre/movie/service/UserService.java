@@ -3,7 +3,6 @@ package com.theatre.movie.service;
 import com.theatre.movie.entity.Role;
 import com.theatre.movie.entity.User;
 import com.theatre.movie.exception.UserAlreadyExistException;
-import com.theatre.movie.form.LoginForm;
 import com.theatre.movie.form.SignUpForm;
 import com.theatre.movie.repository.UserRepository;
 import lombok.AllArgsConstructor;

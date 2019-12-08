@@ -75,11 +75,9 @@
                         <p class="movie-duration"><spring:message code="schedule.duration"/>: ${movie.duration}
                             <fmt:message
                                     key="schedule.min"/></p>
-                        <form action="schedule<c:if test="${param.get('date') != null}">?date=${param.get('date')}</c:if>"
+                        <form action="movie-session?movieId=${movie.movieId}<c:if test="${param.get('date') != null}">&date=${param.get('date')}</c:if>"
                               class="session-form" name="session-form" id="session-form_${movie.movieId}"
                               method="post">
-                            <input id="movieId_${movie.movieId}" type="hidden" name="movieId"
-                                   value="${movie.movieId}"/>
                             <input id="hours_${movie.movieId}" class="session-field" type="number" name="hours"
                                    placeholder="<spring:message code="admin.input.hh"/>" min="9" max="22"
                                    style="padding: 8px 5px">
@@ -88,7 +86,7 @@
                                    style="padding: 8px 5px">
                             <input class="session-field" type="text" name="price"
                                    placeholder="<spring:message code="admin.input.price"/> 0.0" style="padding: 8px 5px">
-                            <input type="submit" value="<spring:message code="admin.add.session"/>" class="add">
+                            <input type="submit" form="session-form_${movie.movieId}" value="<spring:message code="admin.add.session"/>" class="add">
                         </form>
                         <c:forEach items="${movie.movieSessionTimes}" var="time">
                             <a class="tag" href="movie-session/${time.getMovieSessionId()}"

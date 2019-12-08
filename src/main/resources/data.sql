@@ -61,6 +61,11 @@ VALUES ('Lobster', 'Yorgos Lanthimos', 116,
         'https://s3.amazonaws.com/bncore/wp-content/uploads/2016/06/288350.jpg',
         'https://bookshelf.ca/i/size/o/media--0665557f-463f-e93c-f1ed-ee05bae19537/w/600'),
 
+       ('The Hobbit', 'Peter Jackson', 462,
+        'https://www.youtube.com/watch?v=JTSoD4BBCJc',
+        'https://www.xtrafondos.com/wallpapers/resized/bilbo-baggins-en-el-hobbit-3-99.jpg?s=large',
+        'https://is1-ssl.mzstatic.com/image/thumb/Video69/v4/f4/28/dc/f428dca5-5b1d-172e-71f3-e129dd679ac5/pr_source.lsr/268x0w.png'),
+
        ('Eternal Sunshine of the Spotless Mind', 'Michel Gondry', 108,
         'https://www.youtube.com/watch?v=07-QBnEkgXU',
         'http://hd-kino.net/uploads/posts/2015-11/1447508640_5.jpg',
