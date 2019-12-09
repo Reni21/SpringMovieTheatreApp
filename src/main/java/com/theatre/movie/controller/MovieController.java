@@ -4,6 +4,7 @@ import com.theatre.movie.dto.MovieSimpleViewDto;
 import com.theatre.movie.dto.PaginatedData;
 import com.theatre.movie.entity.Movie;
 import com.theatre.movie.exception.MovieRemovalException;
+import com.theatre.movie.form.MovieForm;
 import com.theatre.movie.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -13,9 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -57,7 +61,7 @@ public class MovieController {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(ex.getMessage());
-        } catch (Exception ex){
+        } catch (Exception ex) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Something went wrong");
@@ -65,7 +69,41 @@ public class MovieController {
     }
 
     @PostMapping("/movie")
-    public String createNewMovie(@RequestParam String id, Model model) {
-        return null;
+    @ResponseBody
+    public ResponseEntity<Object> createNewMovie(@Valid @ModelAttribute MovieForm movieForm,
+                                                 BindingResult bindingResult) {
+        LOG.info("Perform post for new movie form:\n{}", movieForm);
+        List<String> errorsMsg = new ArrayList<>();
+        if (bindingResult.hasErrors()) {
+            errorsMsg = collectErrorMessages(bindingResult);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorsMsg);
+        }
+        try {
+            Movie movie = movieService.createMovie(movieForm);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(movie);
+        } catch (Exception ex){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    private List<String> collectErrorMessages(BindingResult bindingResult) {
+        List<String> errorsMsg = new ArrayList<>();
+        bindingResult.getAllErrors().forEach(error -> {
+
+            if (error instanceof FieldError) {
+                FieldError fieldError = (FieldError) error;
+                String field = fieldError.getField();
+                String msg = fieldError.getCode();
+                LOG.info("field={}, msg: {}", field, msg);
+                errorsMsg.add(field + "&" + msg);
+            }
+        });
+        return errorsMsg;
     }
 }

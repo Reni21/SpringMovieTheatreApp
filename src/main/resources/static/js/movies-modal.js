@@ -89,19 +89,23 @@ function submitMovieCreationFormHandler(event) {
 
 // Create new movie for admin-movies with ajax, post part 2
 function createAndDisplayNewMovie(form, event) {
+    let params = (new URL(document.location)).searchParams;
+    let p = params.get("page");
+    var page = parseInt(p);
+
     $.ajax({
         type: form.attr('method'),
         url: form.attr('action'),
         data: form.serialize()
     }).done(function (resp) {
-        var movie = JSON.parse(resp); // delete parse json
+        var movie = resp;
         console.log(movie);
         $(':input').val('');
         var link = '<div class="movie-card">' +
             '<div class="movie-card__container">' +
             '<a href="' + movie.trailerUrl + '" target="_blank">' +
             '<div class="movie-cover">' +
-            '<img class="play-icon" src="static/img/play.png" alt="cover"/>' +
+            '<img class="play-icon" src="img/play.png" alt="cover"/>' +
             '<img class="cover-img" src="' + movie.coverImgUrl + '" alt="cover"/>\n' +
             '</div>' +
             '</a>' +
@@ -118,11 +122,25 @@ function createAndDisplayNewMovie(form, event) {
             '</div>' +
             '</div>';
         $('main').append($(link));
-        $('#myModal').css('display', 'none');
+        location.href = "/movie?page=" + page;
     }).fail(function (jqXHR) {
-        var msg = jqXHR.responseText;
-        alert("Can not create movie. " + msg);
-        console.log(jqXHR.status + ' ' + jqXHR.responseText);
+        var status = jqXHR.status;
+        if (status === 400) {
+            var json = JSON.parse(jqXHR.responseText);
+            var arrayLength = json.length;
+            for (var i = 0; i < arrayLength; i++) {
+                var data = json[i].split("&");
+                var msg = data[1];
+                var placement = data[0];
+                if ($('#err_' + placement).is(':empty')) {
+                    $('#name_' + placement).css('display', 'none');
+                    $('#err_' + placement).html("| " + msg);
+                }
+            }
+        } else {
+            alert("Something went wrong");
+        }
+        console.log(jqXHR.status + ' ' + msg);
     });
     //reject default handler for submit button
     event.preventDefault();

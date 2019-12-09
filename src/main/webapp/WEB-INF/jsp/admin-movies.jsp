@@ -49,7 +49,7 @@
             <!-- Modal content -->
             <div class="modal-content" style="margin-right: 30px;">
                 <div class="form__container" style="border: 0;">
-                    <form class="form__http-properties" action="movies" method="POST">
+                    <form class="form__http-properties" action="movie" method="POST">
                         <!-- Fields -->
 
                         <p id="name_title" class="field-title">Movie Title</p>
@@ -66,15 +66,15 @@
 
                         <p id="name_cover" class="field-title">Cover link</p>
                         <p id="err_cover" class="errors" style="color: red;"></p>
-                        <input type="link" name="cover_link" class="input" data-error="cover"/>
+                        <input type="link" name="cover" class="input" data-error="cover"/>
 
                         <p id="name_bg" class="field-title">Background link</p>
                         <p id="err_bg" class="errors" style="color: red;"></p>
-                        <input type="link" name="bg_link" class="input" data-error="bg"/>
+                        <input type="link" name="bg" class="input" data-error="bg"/>
 
                         <p id="name_trailer" class="field-title">Trailer link</p>
                         <p id="err_trailer" class="errors" style="color: red;"></p>
-                        <input type="link" name="trailer_link" class="input" data-error="trailer"/>
+                        <input type="link" name="trailer" class="input" data-error="trailer"/>
 
                         <!-- Buttons -->
                         <button type="submit" class="signinbutton"

@@ -4,6 +4,7 @@ import com.theatre.movie.dto.MovieSimpleViewDto;
 import com.theatre.movie.dto.PaginatedData;
 import com.theatre.movie.entity.Movie;
 import com.theatre.movie.exception.MovieRemovalException;
+import com.theatre.movie.form.MovieForm;
 import com.theatre.movie.repository.BookingRepository;
 import com.theatre.movie.repository.MovieRepository;
 import com.theatre.movie.repository.MovieSessionRepository;
@@ -27,6 +28,15 @@ public class MovieService {
     private MovieRepository movieRepo;
     private MovieSessionRepository movieSessionRepo;
     private BookingRepository bookingRepo;
+
+    public Movie createMovie(MovieForm movieForm) {
+
+        Movie movie = new Movie(movieForm.getTitle(), movieForm.getDirected(), movieForm.getDuration());
+        movie.setTrailerUrl(movieForm.getTrailer());
+        movie.setCoverImgUrl(movieForm.getCover());
+        movie.setBackgroundImgUrl(movieForm.getBg());
+        return movieRepo.save(movie);
+    }
 
     public List<MovieSimpleViewDto> getAllSimpleView(){
         LOG.info("Extract simple movie view data");
