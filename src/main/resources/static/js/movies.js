@@ -63,7 +63,12 @@ function removePinHandler(movieId) {
         }).done(function (resp) {
             $('#' + movieId).remove();
         }).fail(function (jqXHR) {
-            var msg = jqXHR.responseText;
+            var msg;
+            if (status === 400) {
+                msg = jqXHR.responseText;
+            } else {
+                msg = "Something went wrong";
+            }
             var er = '<span class="error">' + '| ' + msg + '</span>';
             $('#errors_' + movieId).html(er);
             $('.errors').css('display', 'block');

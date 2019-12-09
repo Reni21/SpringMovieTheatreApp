@@ -20,7 +20,7 @@ window.onclick = function () {
 };
 
 // Create new movie for admin-movies with ajax, validation part 1
-function submitFormHandler(event) {
+function submitMovieCreationFormHandler(event) {
     var $form = $(this);
 
     $($form).validate({ // initialize the plugin
@@ -129,17 +129,34 @@ function createAndDisplayNewMovie(form, event) {
 }
 
 $(function () {
-    $('com.theatre.movie.form').submit(submitFormHandler);
+    $('form').submit(submitMovieCreationFormHandler);
 });
 
 function deleteMovieHandler(movieId) {
+    let params = (new URL(document.location)).searchParams;
+    let p = params.get("page");
+    var page = parseInt(p);
+
     $.ajax({
-        type: 'post',
+        type: 'delete',
         url: 'movie?id=' + movieId
     }).done(function (resp) {
         $('#card_' + movieId).remove();
+        var movie_card = parseInt($(".movie-card").length);
+        if (movie_card === 0) {
+            page = page === 1 ? 1 : page - 1;
+            location.href = "/movie?page=" + page;
+        } else {
+            location.href = "/movie?page=" + page;
+        }
     }).fail(function (jqXHR) {
-        var msg = jqXHR.responseText;
+        var status = jqXHR.status;
+        var msg;
+        if (status === 400) {
+            msg = jqXHR.responseText;
+        } else {
+            msg = "Something went wrong";
+        }
         alert(msg);
         console.log(jqXHR.status + ' ' + jqXHR.responseText);
     });

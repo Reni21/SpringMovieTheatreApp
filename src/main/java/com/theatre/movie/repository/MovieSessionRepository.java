@@ -1,6 +1,7 @@
 package com.theatre.movie.repository;
 
 import com.theatre.movie.entity.MovieSession;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +14,9 @@ public interface MovieSessionRepository extends CrudRepository<MovieSession, Int
     @Query("SELECT ms FROM MovieSession ms WHERE ms.startAt BETWEEN (:searchFrom) AND (:searchTo)")
     List<MovieSession> getAllInRange(@Param("searchFrom") LocalDateTime searchFrom,
                                      @Param("searchTo") LocalDateTime searchTo);
+
+    //    @Query(value = "DELETE FROM movie_session ms WHERE ms.movie_id = (:movieId)", nativeQuery = true)
+    @Modifying
+    @Query(value = "DELETE FROM MovieSession ms WHERE ms.movie.movieId = (:movieId)")
+    void deleteAllByMovieId(@Param("movieId") Integer movieId);
 }

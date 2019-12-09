@@ -24,7 +24,13 @@ $('.openModalBtn').click(function () {
             }
         })
         .fail(function (jqXHR) {
-            alert("error");
+            var msg;
+            if (status === 400) {
+                msg = jqXHR.responseText;
+            } else {
+                msg = "Something went wrong";
+            }
+            alert(msg);
         });
     $('#myModal').css('display', 'block');
 });
@@ -135,10 +141,10 @@ function createAndDisplayNewMovieSession(form, event) {
                 $('#errors_' + movieId).html(er);
             }
         } else {
-            location.href = status + "-error";
+               alert("Something went wrong");
         }
+        console.log(jqXHR.status);
         $('.errors').css('display', 'block');
-        console.log(jqXHR.responseText);
     });
     //reject default handler for submit button
     event.preventDefault();

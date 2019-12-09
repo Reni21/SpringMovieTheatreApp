@@ -20,8 +20,13 @@ public interface BookingRepository extends CrudRepository<Booking, Integer> {
             "AND (status = 'BOOKED' OR status = 'PAID')", nativeQuery = true)
     List<Booking> getAllActualBookingByUserId(Integer userId);
 
-    @Query("SELECT CASE WHEN COUNT(b) > 0 THEN 'true' ELSE 'false' END FROM Booking b " +
-            "JOIN MovieSession ms ON b.movieSession.sessionId = ms.sessionId " +
-            "WHERE b.movieSession.sessionId = (:movieSessionId)")
+    @Query(value = "SELECT CASE WHEN (SELECT  COUNT(b.booking_id) " +
+            "FROM booking b JOIN movie_session ms ON b.session_id = ms.session_id " +
+            "WHERE b.session_id = (:movieSessionId) GROUP BY ms.start_at >= CURRENT_TIMESTAMP()) IS NULL THEN 'false' ELSE 'true' END", nativeQuery = true)
     boolean isBookingForMovieSessionExist(Integer movieSessionId);
+
+    @Query(value = "SELECT CASE WHEN (SELECT  COUNT(b.booking_id) " +
+            "FROM booking b JOIN movie_session ms ON b.session_id = ms.session_id " +
+            "WHERE ms.movie_id = (:movieId) GROUP BY ms.start_at >= CURRENT_TIMESTAMP()) IS NULL THEN 'false' ELSE 'true' END", nativeQuery = true)
+    boolean isBookingForMovieExist(int movieId);
 }
