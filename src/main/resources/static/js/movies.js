@@ -10,7 +10,7 @@ function pinMovie(form, event, moviesToPin, submitFormHandler) {
     var date = path_param.split('=')[1];
     $.each(movieIds, function (index, value) {
         var movie = moviesToPin.get(parseInt(value));
-        var formId= '#session-form_' + value;
+        var formId = '#session-form_' + value;
         var link = '<div id="' + value + '"><div class="wrapper">' +
             '<div id="errors_' + value + '" class="errors" style="font-size: 15px;color: red;margin: 0 auto;position: relative;"></div>' +
             '</div>' +
@@ -56,12 +56,10 @@ function removePinHandler(movieId) {
             return this.id;
         }).get();
 
-        var jsonData = {sessionsIds: sessionsIds};
         console.log(JSON.stringify(sessionsIds));
         $.ajax({
-            type: 'post',
-            url: 'movie-session',
-            data: {sessionsIds: JSON.stringify(sessionsIds)} // @RequestBody annotation to cotroller params
+            type: 'delete',
+            url: '/movie-session?param=' + sessionsIds,
         }).done(function (resp) {
             $('#' + movieId).remove();
         }).fail(function (jqXHR) {

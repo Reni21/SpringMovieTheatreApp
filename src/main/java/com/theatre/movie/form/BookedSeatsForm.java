@@ -10,5 +10,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class BookedSeatsForm {
+    String movieSessionId;
     String [] bookedSeats;
 }

@@ -30,7 +30,7 @@
                     <li <c:if
                             test="${menuDate.isActive() && !requestScope['javax.servlet.forward.request_uri'].contains('movie-session')}">
                         class="active"</c:if>>
-                        <a href="schedule${menuDate.getIsoDate()}">
+                        <a href="/schedule${menuDate.getIsoDate()}">
                             <fmt:message key="week.day.${menuDate.getDayOfWeek()}"/>
                                 ${menuDate.getFormattedDate()}</a></li>
                 </c:forEach>
@@ -55,7 +55,8 @@
                             <div class="screen"><p>SCREEN</p></div>
                             <c:set value="${movie.bookedSeats}" var="bookedSeats"/>
                             <div id="session_price" value="${movie.price}"></div>
-                            <form id="selectedSeats" method="post" action="/booking/${movie.sessionId}">
+                            <form id="selectedSeats" method="post" action="/booking">
+                                <input type="hidden" name="movieSessionId" value="${movie.sessionId}">
                                 <c:forEach items="${bookedSeats.entrySet()}" var="entrySetSeats">
                                 <div class="seatRow">
                                     <div class="seatRowNumber">Row ${entrySetSeats.getKey()}</div>

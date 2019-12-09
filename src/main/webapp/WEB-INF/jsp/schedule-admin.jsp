@@ -23,7 +23,7 @@
     <ul class="nav__second-lvl">
         <c:forEach items="${menuDates}" var="menuDate">
             <li <c:if test="${menuDate.isActive()}">class="active"</c:if>>
-                <a href="schedule${menuDate.getIsoDate()}">
+                <a href="/schedule${menuDate.getIsoDate()}">
                     <spring:message code="week.day.${menuDate.getDayOfWeek()}"/>
                         ${menuDate.getFormattedDate()}</a></li>
         </c:forEach>
@@ -55,7 +55,7 @@
     <!-- - - - - - - - The Modal for movies - - - - - - - -->
 
     <c:forEach items="${sessions}" var="movie">
-        <div id="#${movie.movieId}">
+        <div id="${movie.movieId}">
             <div class="wrapper">
                 <div id="errors_${movie.movieId}" class="errors"
                      style="font-size: 15px;color: red;margin: 0 auto;position: relative;"></div>

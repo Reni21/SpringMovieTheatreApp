@@ -12,6 +12,6 @@ public class ExceptionHandlingController {
     @ExceptionHandler(Exception.class)
     public String handle(Exception e) {
         LOG.error("Unknown error occurred: {}", e.getMessage());
-        return "redirect:error-500";
+        return "error-500";
     }
 }

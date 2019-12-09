@@ -29,7 +29,8 @@ public class BookingService {
     private SeatRepository seatRepo;
     private MovieSessionRepository movieSessionRepo;
 
-    public void createBooking(BookedSeatsForm bookedSeatsForm, Integer movieSessionId, String username) {
+    public void createBooking(BookedSeatsForm bookedSeatsForm, String username) {
+        Integer movieSessionId = Integer.parseInt(bookedSeatsForm.getMovieSessionId());
 
         for (String seatId : bookedSeatsForm.getBookedSeats()) {
             Booking booking = new Booking(

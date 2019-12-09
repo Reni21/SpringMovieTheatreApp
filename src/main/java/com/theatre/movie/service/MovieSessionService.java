@@ -11,6 +11,7 @@ import com.theatre.movie.entity.MovieSession;
 import com.theatre.movie.entity.Seat;
 import com.theatre.movie.exception.InvalidScheduleDateException;
 import com.theatre.movie.exception.MovieScheduleRemovalException;
+import com.theatre.movie.exception.MovieSessionCreationException;
 import com.theatre.movie.form.MovieSessionForm;
 import com.theatre.movie.repository.BookingRepository;
 import com.theatre.movie.repository.HallRepository;
@@ -30,12 +31,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
 public class MovieSessionService {
     private static final Logger LOG = LoggerFactory.getLogger(MovieSessionService.class);
+    private static final int BREAK_DURATION = 15;
 
     private MovieSessionRepository movieSessionRepo;
     private BookingRepository bookingRepo;
@@ -116,30 +119,68 @@ public class MovieSessionService {
     }
 
     @Transactional
-    public MovieSession addMovieSession(MovieSessionForm movieSessionForm, String dateStr, String movieId) {
+    public MovieSession addMovieSession(MovieSessionForm movieSessionForm, String dateStr, String movieId) throws MovieSessionCreationException {
         LOG.info("Create new movie session for data: " + movieSessionForm);
 
         LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
         LocalTime time = LocalTime.of(movieSessionForm.getHours(), movieSessionForm.getMinutes());
         LocalDateTime startAt = LocalDateTime.of(date, time);
+        Movie movie = movieRepo.findById(Integer.parseInt(movieId)).get();
         MovieSession movieSession = new MovieSession(
-                movieRepo.findById(Integer.parseInt(movieId)).get(),
+                movie,
                 hallRepo.findById(1).get(),
                 startAt,
                 movieSessionForm.getPrice());
+        validateMovieSessionTimeRange(movieSessionForm, movie.getDurationMinutes(), dateStr);
         return movieSessionRepo.save(movieSession);
     }
 
     @Transactional
-    public void deleteMovieSessionByIds(List<Integer> sessionsIds) throws MovieScheduleRemovalException {
-        for (Integer id : sessionsIds) {
-            boolean bookingExists = bookingRepo.isBookingForMovieSessionExist(id);
+    public void deleteMovieSessionByIds(List<String> sessionsIds) throws MovieScheduleRemovalException {
+        for (String id : sessionsIds) {
+            boolean bookingExists = bookingRepo.isBookingForMovieSessionExist(Integer.parseInt(id));
             if (bookingExists) {
+                LOG.info("Exist booking for required movie session:{}", id);
                 throw new MovieScheduleRemovalException("Movie card can not be deleted. Some sessions already have reservations.");
             }
         }
-        sessionsIds.forEach(movieSessionRepo::deleteById);
+        sessionsIds.forEach(id -> {
+            movieSessionRepo.deleteById(Integer.parseInt(id));
+        });
 
+    }
+
+    private void validateMovieSessionTimeRange(MovieSessionForm movieSessionForm, int newMovieDuration, String dateStr) throws MovieSessionCreationException {
+        LocalDateTime newMovieStartAt = getSessionStartAt(movieSessionForm, dateStr);
+
+        LocalDateTime from = newMovieStartAt.toLocalDate().atStartOfDay();
+        LocalDateTime to = newMovieStartAt.plusMinutes(newMovieDuration + BREAK_DURATION);
+
+        List<MovieSession> movieSessions = movieSessionRepo.getAllInRange(from, to);
+
+        StringJoiner errors = new StringJoiner(";");
+
+        for (MovieSession movieSession : movieSessions) {
+            int movieDuration = movieSession.getMovie().getDurationMinutes();
+            LocalDateTime movieStartAt = movieSession.getStartAt();
+
+            if (newMovieStartAt.isEqual(movieStartAt)
+                    || (newMovieStartAt.isAfter(movieStartAt) && newMovieStartAt.isBefore(movieStartAt.plusMinutes(movieDuration + BREAK_DURATION)))
+                    || (newMovieStartAt.isBefore(movieStartAt) && newMovieStartAt.plusMinutes(newMovieDuration + BREAK_DURATION).isAfter(movieStartAt))) {
+                errors.add(String.format("%s duration %d", movieStartAt.format(DateTimeFormatter.ofPattern("HH:mm")), movieDuration));
+            }
+        }
+
+        if (errors.length() != 0) {
+            throw new MovieSessionCreationException("Conflict session times: " + errors.toString());
+        }
+
+    }
+
+    private LocalDateTime getSessionStartAt(MovieSessionForm movieSessionForm, String dateStr) {
+        LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
+        LocalTime time = LocalTime.of(movieSessionForm.getHours(), movieSessionForm.getMinutes());
+        return LocalDateTime.of(date, time);
     }
 
 }
