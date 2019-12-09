@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface MovieRepository extends CrudRepository<Movie, Integer> {
 
-
 }

@@ -27,7 +27,10 @@ public class UserService {
     public User registerUser(SignUpForm signUpForm, Role role) throws UserAlreadyExistException {
         validateUserRequest(signUpForm);
         //todo: add pass hashing
-        User user = new User(signUpForm.getUsername(),signUpForm.getPassword(), signUpForm.getEmail(), role);
+        User user = new User(signUpForm.getUsername().trim(),
+                signUpForm.getPassword().trim(),
+                signUpForm.getEmail().trim(),
+                role);
         return userRepo.save(user);
     }
 

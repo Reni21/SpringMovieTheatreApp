@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MovieSessionRepository extends CrudRepository<MovieSession, Integer> {
+
     @Query("SELECT ms FROM MovieSession ms WHERE ms.startAt BETWEEN (:searchFrom) AND (:searchTo)")
     List<MovieSession> getAllInRange(@Param("searchFrom") LocalDateTime searchFrom,
                                      @Param("searchTo") LocalDateTime searchTo);

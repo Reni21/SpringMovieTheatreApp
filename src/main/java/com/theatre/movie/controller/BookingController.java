@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -32,11 +34,21 @@ public class BookingController {
     }
 
     @PostMapping("/booking")
-    public String postSelectedSeats(@ModelAttribute BookedSeatsForm bookedSeatsForm,
-                                    Authentication authentication) {
+    public String postSelectedSeats(@Valid @ModelAttribute BookedSeatsForm bookedSeatsForm,
+                                    BindingResult bindingResult,
+                                    Authentication authentication,
+                                    Model model) {
         String username =  authentication.getName();
         LOG.info("Booking for username: {}.\nForm data: {}", username, bookedSeatsForm);
-        bookingService.createBooking(bookedSeatsForm, username);
+        if (bindingResult.hasErrors()){
+            LOG.error("Empty form data");
+            return "redirect:/tickets?error";
+        }
+        try {
+            bookingService.createBooking(bookedSeatsForm, username);
+        } catch (Exception ex){
+            return "redirect:/tickets?error";
+        }
         return "redirect:/tickets";
     }
 }

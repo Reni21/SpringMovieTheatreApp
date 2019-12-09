@@ -7,7 +7,6 @@ $(".seatNumber").click(
             // If selected, unselect it
             if ($(this).hasClass("seatSelected")) {
                 var thisId = $(this).attr('id');
-                // var price = price;
                 $(this).removeClass("seatSelected");
                 $('#seatsList .' + thisId).remove();
                 // Calling functions to update checkout total and seat counter.
@@ -20,11 +19,14 @@ $(".seatNumber").click(
                     $("#btnClear").removeClass("btn-disabled");
                     $("#btnClear strong").removeClass("btn-disabled");
                 }
+                if ($("#btnCheckout").hasClass("btn-disabled")) {
+                    $("#btnCheckout").removeClass("btn-disabled");
+                    $("#btnCheckout").addClass("primary-active");
+                }
                 // else, select it
                 // getting values from Seat
                 var thisId = $(this).attr('id');
                 var id = thisId.split("_");
-                // var price = parseFloat(buf);
                 var seatDetails = "Row: " + id[0] + " &ensp;| &ensp;Seat: " + id[1] + " &ensp;| &ensp;Price: " + price;
 
                 // Adding this seat to the list
@@ -58,7 +60,6 @@ $(".seatNumber").hover(
         if (!$(this).hasClass("seatUnavailable")) {
             var id = $(this).attr('id');
             var id = id.split("_");
-            // var price = parseFloat(buf);
             var tooltip = "Row: " + id[0] + "    |    Seat:" + id[1] + "    |    Price: " + price;
 
             $(this).prop('title', tooltip);
@@ -112,6 +113,8 @@ function setDisabledClass() {
     if (selectedSeats === 0) {
         $("#btnClear").addClass("btn-disabled");
         $("#btnClear strong").addClass("btn-disabled");
+        $("#btnCheckout").addClass("btn-disabled");
+        $("#btnCheckout").removeClass("primary-active");
     }
 
 }

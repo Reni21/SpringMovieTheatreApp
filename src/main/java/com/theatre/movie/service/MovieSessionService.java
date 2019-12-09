@@ -100,24 +100,6 @@ public class MovieSessionService {
         }
     }
 
-    private List<MovieSessionTimeViewDto> mapMovieSessionTimeDtos(List<MovieSession> movieSessions) {
-        return movieSessions.stream()
-                .map(session -> new MovieSessionTimeViewDto(
-                        session.getSessionId(),
-                        session.getStartAt().toLocalTime()))
-                .collect(Collectors.toList());
-    }
-
-    private Map<Integer, List<BookedSeatViewDto>> mapBookedSeats(List<Seat> allSeats, Set<Integer> bookedSeats) {
-        return allSeats.stream().map(seat -> {
-            BookedSeatViewDto dto = new BookedSeatViewDto(seat.getSeatId(), seat.getRow(), seat.getPlace());
-            if (bookedSeats.contains(seat.getSeatId())) {
-                dto.setBooked(true);
-            }
-            return dto;
-        }).collect(Collectors.groupingBy(BookedSeatViewDto::getRow));
-    }
-
     @Transactional
     public MovieSession addMovieSession(MovieSessionForm movieSessionForm, String dateStr, String movieId) throws MovieSessionCreationException {
         LOG.info("Create new movie session for data: " + movieSessionForm);
@@ -148,6 +130,24 @@ public class MovieSessionService {
             movieSessionRepo.deleteById(Integer.parseInt(id));
         });
 
+    }
+
+    private List<MovieSessionTimeViewDto> mapMovieSessionTimeDtos(List<MovieSession> movieSessions) {
+        return movieSessions.stream()
+                .map(session -> new MovieSessionTimeViewDto(
+                        session.getSessionId(),
+                        session.getStartAt().toLocalTime()))
+                .collect(Collectors.toList());
+    }
+
+    private Map<Integer, List<BookedSeatViewDto>> mapBookedSeats(List<Seat> allSeats, Set<Integer> bookedSeats) {
+        return allSeats.stream().map(seat -> {
+            BookedSeatViewDto dto = new BookedSeatViewDto(seat.getSeatId(), seat.getRow(), seat.getPlace());
+            if (bookedSeats.contains(seat.getSeatId())) {
+                dto.setBooked(true);
+            }
+            return dto;
+        }).collect(Collectors.groupingBy(BookedSeatViewDto::getRow));
     }
 
     private void validateMovieSessionTimeRange(MovieSessionForm movieSessionForm, int newMovieDuration, String dateStr) throws MovieSessionCreationException {

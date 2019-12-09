@@ -57,9 +57,10 @@ public class MovieSessionController {
         LOG.info("Perform post for movie id={} and movie session data:{}\n form:\n{}", movieId, date, movieSessionForm);
         List<String> errorsMsg = new ArrayList<>();
         if (bindingResult.hasErrors()) {
+            errorsMsg = collectErrorMessages(bindingResult);
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(collectErrorMessages(bindingResult));
+                    .body(errorsMsg);
         }
 
         try {
