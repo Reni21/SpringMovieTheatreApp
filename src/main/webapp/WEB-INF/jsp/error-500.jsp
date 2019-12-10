@@ -37,7 +37,7 @@
             </div>
         </main>
         <script src='/js/particlesmin.js'></script>
-        <script type="text/javascript" src="/static/js/error-particles.js"></script>
+        <script type="text/javascript" src="/js/error-particles.js"></script>
     </body>
 </html>
 

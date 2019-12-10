@@ -133,8 +133,8 @@
         </main>
         <script src="/js/jquery/jquery-3.4.1.min.js"></script>
         <c:if test="${user == null || user.getRole().toString() == 'ROLE_USER'}">
-            <script type="text/javascript" src="/static/js/booking-script.js"></script>
+            <script type="text/javascript" src="/js/booking-script.js"></script>
         </c:if>
-        <script type="text/javascript" src="/static/js/delete-movie-session.js"></script>
+        <script type="text/javascript" src="/js/delete-movie-session.js"></script>
     </body>
 </html>

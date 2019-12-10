@@ -100,8 +100,8 @@
 </main>
 <script src="js/jquery/jquery-3.4.1.min.js"></script>
 <script src="js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="../../../resources/static/js/pin-movie-schedule.js"></script>
-<script type="text/javascript" src="../../../resources/static/js/movies-modal-session-creation.js"></script>
+<script type="text/javascript" src="js/pin-movie-schedule.js"></script>
+<script type="text/javascript" src="js/movies-modal-session-creation.js"></script>
 <script type="text/javascript">
     var errorsDictionary = new Map([
         ["hoursRequired", "<spring:message code='error.hours.required'/>"],
