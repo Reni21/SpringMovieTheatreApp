@@ -36,15 +36,15 @@ function submitMovieCreationFormHandler(event) {
                 digits: true,
                 min: 0
             },
-            cover_link: {
+            cover: {
                 required: true,
                 url: true
             },
-            bg_link: {
+            bg: {
                 required: true,
                 url: true
             },
-            trailer_link: {
+            trailer: {
                 required: true,
                 url: true
             }
@@ -89,8 +89,8 @@ function submitMovieCreationFormHandler(event) {
 
 // Create new movie for admin-movies with ajax, post part 2
 function createAndDisplayNewMovie(form, event) {
-    let params = (new URL(document.location)).searchParams;
-    let p = params.get("page");
+    var params = (new URL(document.location)).searchParams;
+    var p = params.get("page");
     var page = parseInt(p);
 
     $.ajax({
@@ -151,8 +151,8 @@ $(function () {
 });
 
 function deleteMovieHandler(movieId) {
-    let params = (new URL(document.location)).searchParams;
-    let p = params.get("page");
+    var params = (new URL(document.location)).searchParams;
+    var p = params.get("page");
     var page = parseInt(p);
 
     $.ajax({

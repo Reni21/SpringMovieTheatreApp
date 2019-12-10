@@ -51,10 +51,6 @@ $(document).ready(function () {
             $('#err_' + placement).html(error);
         }
     });
-
-    if (!form.valid()) {
-        return false;
-    }
 });
 jQuery.validator.addMethod("match", function (value, element, param) {
     return value.match(new RegExp("." + param + "$"));

@@ -131,7 +131,7 @@
             </div>
             </div>
         </main>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="/js/jquery/jquery-3.4.1.min.js"></script>
         <c:if test="${user == null || user.getRole().toString() == 'ROLE_USER'}">
             <script type="text/javascript" src="/js/script.js"></script>
         </c:if>
