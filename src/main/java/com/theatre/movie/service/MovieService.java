@@ -29,8 +29,8 @@ public class MovieService {
     private MovieSessionRepository movieSessionRepo;
     private BookingRepository bookingRepo;
 
+    @Transactional
     public Movie createMovie(MovieForm movieForm) {
-
         Movie movie = new Movie(movieForm.getTitle(), movieForm.getDirected(), movieForm.getDuration());
         movie.setTrailerUrl(movieForm.getTrailer());
         movie.setCoverImgUrl(movieForm.getCover());
@@ -38,6 +38,7 @@ public class MovieService {
         return movieRepo.save(movie);
     }
 
+    @Transactional(readOnly = true)
     public List<MovieSimpleViewDto> getAllSimpleView(){
         LOG.info("Extract simple movie view data");
         List<Movie> movies = (List<Movie>) movieRepo.findAll();

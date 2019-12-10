@@ -13,9 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
     private UserRepository userRepo;

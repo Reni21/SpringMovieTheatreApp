@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class BookingService {
     private static final Logger LOG = LoggerFactory.getLogger(BookingService.class);
     private BookingRepository bookingRepo;
@@ -29,6 +29,7 @@ public class BookingService {
     private SeatRepository seatRepo;
     private MovieSessionRepository movieSessionRepo;
 
+    @Transactional
     public void createBooking(BookedSeatsForm bookedSeatsForm, String username) {
         Integer movieSessionId = Integer.parseInt(bookedSeatsForm.getMovieSessionId());
 
@@ -39,12 +40,12 @@ public class BookingService {
                     seatRepo.findById(Integer.parseInt(seatId)).get(),
                     movieSessionRepo.findById(movieSessionId).get()
             );
-            Booking createdBooking = bookingRepo.save(booking); // todo: exception if something went wrong
+            Booking createdBooking = bookingRepo.save(booking);
             LOG.info("Created new booking: \n{}", createdBooking);
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BookingViewDto> getActualUsersBookingById(String username) {
         LOG.info("Get actual booking for user username=" + username);
         User user = userRepo.findByUsername(username);

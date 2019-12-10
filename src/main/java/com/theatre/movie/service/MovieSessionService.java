@@ -34,8 +34,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MovieSessionService {
     private static final Logger LOG = LoggerFactory.getLogger(MovieSessionService.class);
     private static final int BREAK_DURATION = 15;
@@ -63,6 +63,7 @@ public class MovieSessionService {
         return dto;
     }
 
+    @Transactional(readOnly = true)
     public List<MovieSessionsScheduleViewDto> getMovieSessionsScheduleForDate(LocalDate date)
             throws InvalidScheduleDateException {
 
@@ -90,14 +91,6 @@ public class MovieSessionService {
                     scheduleDto.setMovieId(movie.getMovieId());
                     return scheduleDto;
                 }).collect(Collectors.toList());
-    }
-
-    private void checkScheduleDateInValidRange(LocalDate date) throws InvalidScheduleDateException {
-        LocalDate now = LocalDate.now();
-        if (date.isBefore(now) || date.isAfter(now.plusDays(7))) {
-            throw new InvalidScheduleDateException(
-                    "Date " + date.format(DateTimeFormatter.ISO_DATE) + " is in wrong range");
-        }
     }
 
     @Transactional
@@ -133,6 +126,14 @@ public class MovieSessionService {
             movieSessionRepo.deleteById(Integer.parseInt(id));
         });
 
+    }
+
+    private void checkScheduleDateInValidRange(LocalDate date) throws InvalidScheduleDateException {
+        LocalDate now = LocalDate.now();
+        if (date.isBefore(now) || date.isAfter(now.plusDays(7))) {
+            throw new InvalidScheduleDateException(
+                    "Date " + date.format(DateTimeFormatter.ISO_DATE) + " is in wrong range");
+        }
     }
 
     private List<MovieSessionTimeViewDto> mapMovieSessionTimeDtos(List<MovieSession> movieSessions) {
