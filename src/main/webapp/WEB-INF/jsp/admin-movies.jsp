@@ -129,7 +129,7 @@
 </main>
 <script src="js/jquery/jquery-3.4.1.min.js"></script>
 <script src="js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="js/movies-modal.js"></script>
+<script type="text/javascript" src="../../../resources/static/js/movie-creation-modal.js"></script>
 </body>
 </html>
 
