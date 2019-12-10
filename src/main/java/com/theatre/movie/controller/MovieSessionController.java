@@ -80,7 +80,7 @@ public class MovieSessionController {
             LOG.error(msg, ex);
             errorsMsg.add(msg);
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(errorsMsg);
         }
     }
@@ -93,7 +93,7 @@ public class MovieSessionController {
             movieSessionService.deleteMovieSessionByIds(Arrays.asList(sessionsIds));
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(null);
+                    .build();
 
         } catch (MovieScheduleRemovalException ex) {
             return ResponseEntity
@@ -103,7 +103,7 @@ public class MovieSessionController {
         } catch (Exception e) {
             LOG.error("Error while delete movie session:", e);
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Something went wrong");
         }
     }
@@ -121,7 +121,7 @@ public class MovieSessionController {
                 FieldError fieldError = (FieldError) error;
                 String field = fieldError.getField();
                 String msg = fieldError.getCode();
-                LOG.info("field={}, msg: {}", field, msg);
+                LOG.debug("field={}, msg: {}", field, msg);
                 errorsMsg.add(msg);
             }
         });

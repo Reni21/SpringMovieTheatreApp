@@ -40,14 +40,14 @@ public class ScheduleController {
         LOG.info("Get for /schedule");
         if (date == null) {
             String url = "schedule?date=" + LocalDate.now().format(DateTimeFormatter.ISO_DATE);
-            LOG.info("Date param is null. Send redirect to url: {}",url);
+            LOG.info("Date param is null. Send redirect to url: {}", url);
             return "redirect:" + url;
         }
         try {
             List<MovieSessionsScheduleViewDto> currentDaySessions = movieSessionService.getMovieSessionsScheduleForDate(date);
             List<MenuDateViewDto> menuDates = weekScheduleDatesService.getWeekScheduleDates(date);
 
-            LOG.info("Current day sessions number: {}\n{}",currentDaySessions.size(), currentDaySessions);
+            LOG.info("Current day sessions number: {}\n{}", currentDaySessions.size(), currentDaySessions);
             model.addAttribute("menuDates", menuDates);
             model.addAttribute("sessions", currentDaySessions);
             model.addAttribute("activeTab", "schedule");

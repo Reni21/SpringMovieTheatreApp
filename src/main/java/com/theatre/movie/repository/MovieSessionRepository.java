@@ -15,7 +15,6 @@ public interface MovieSessionRepository extends CrudRepository<MovieSession, Int
     List<MovieSession> getAllInRange(@Param("searchFrom") LocalDateTime searchFrom,
                                      @Param("searchTo") LocalDateTime searchTo);
 
-    //    @Query(value = "DELETE FROM movie_session ms WHERE ms.movie_id = (:movieId)", nativeQuery = true)
     @Modifying
     @Query(value = "DELETE FROM MovieSession ms WHERE ms.movie.movieId = (:movieId)")
     void deleteAllByMovieId(@Param("movieId") Integer movieId);

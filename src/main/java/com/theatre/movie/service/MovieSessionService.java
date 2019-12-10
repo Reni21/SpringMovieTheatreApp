@@ -45,7 +45,7 @@ public class MovieSessionService {
     private MovieRepository movieRepo;
     private HallRepository hallRepo;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public MovieSessionViewDto getMovieSessionById(int id) {
         MovieSession movieSession = movieSessionRepo.findById(id).get();
         Set<Integer> bookedSeats = bookingRepo.getAllBookedSeatsIdByMovieSessionId(id);
@@ -100,7 +100,7 @@ public class MovieSessionService {
         LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
         LocalTime time = LocalTime.of(movieSessionForm.getHours(), movieSessionForm.getMinutes());
         LocalDateTime startAt = LocalDateTime.of(date, time);
-        if(startAt.isBefore(LocalDateTime.now())){
+        if (startAt.isBefore(LocalDateTime.now())) {
             throw new MovieSessionCreationException("Required time already passed.");
         }
         Movie movie = movieRepo.findById(Integer.parseInt(movieId)).get();

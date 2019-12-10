@@ -63,7 +63,7 @@ public class MovieController {
                     .body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Something went wrong");
         }
     }
@@ -73,9 +73,8 @@ public class MovieController {
     public ResponseEntity<Object> createNewMovie(@Valid @ModelAttribute MovieForm movieForm,
                                                  BindingResult bindingResult) {
         LOG.info("Perform post for new movie form:\n{}", movieForm);
-        List<String> errorsMsg = new ArrayList<>();
         if (bindingResult.hasErrors()) {
-            errorsMsg = collectErrorMessages(bindingResult);
+            List<String> errorsMsg = collectErrorMessages(bindingResult);
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorsMsg);
@@ -85,7 +84,7 @@ public class MovieController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(movie);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();

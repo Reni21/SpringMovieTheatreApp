@@ -3,7 +3,6 @@ package com.theatre.movie.service;
 import com.theatre.movie.dto.BookingViewDto;
 import com.theatre.movie.entity.*;
 import com.theatre.movie.form.BookedSeatsForm;
-import com.theatre.movie.form.dto.CreateBookingDto;
 import com.theatre.movie.repository.BookingRepository;
 import com.theatre.movie.repository.MovieSessionRepository;
 import com.theatre.movie.repository.SeatRepository;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +58,7 @@ public class BookingService {
         return dtos;
     }
 
-    private BookingViewDto mapBookingViewDto(Booking booking){
+    private BookingViewDto mapBookingViewDto(Booking booking) {
         MovieSession movieSession = booking.getMovieSession();
         Movie movie = booking.getMovieSession().getMovie();
         Seat seat = booking.getBookedSeat();
