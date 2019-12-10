@@ -64,6 +64,7 @@ function removePinHandler(movieId) {
             $('#' + movieId).remove();
         }).fail(function (jqXHR) {
             var msg;
+            var status = jqXHR.status;
             if (status === 400) {
                 msg = jqXHR.responseText;
             } else {
