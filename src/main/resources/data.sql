@@ -1,9 +1,9 @@
 USE movie_theatre_spring;
 
 INSERT INTO user (username, password, role, email)
-VALUES ('admin', 'admin', 'ROLE_ADMIN', 'admin@gmail.com'),
-       ('reni', 'reni', 'ROLE_USER', 'reni@gmail.com'),
-       ('test', 'test', 'ROLE_USER', 'test@gmail.com');
+VALUES ('admin', '$2a$12$5JtCXmg8uG2q9ONOWpe1m.NNcen71StlJF6hMcm4i28pZbRRsDM8K', 'ROLE_ADMIN', 'admin@gmail.com'),
+       ('reni', '$2a$12$x5PPRAeu7Q3waMFci7gAb.JXRX/sRCmOfYdgF4/nmBY8BBh4m1uUq', 'ROLE_USER', 'reni@gmail.com'),
+       ('test', '$2a$12$9ZkXUOxheiPzR0fqQvYh2OW.o8Topk0wDXfFSLiRINelISI81fpA6', 'ROLE_USER', 'test@gmail.com');
 
 INSERT INTO hall (name)
 VALUES (1);

@@ -3,10 +3,7 @@ package com.theatre.movie.form;
 
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +18,10 @@ public class SignUpForm {
     @NotNull(message = "{error.notnull}")
     @NotEmpty(message = "{error.notempty}")
     @Size(min = 5, max = 20, message = "{error.password.sizerange}")
+    @Pattern.List({
+            @Pattern(regexp = "(.*[A-Z].*)", message = "{error.password.uppercaseLetter}"),
+            @Pattern(regexp = "(.*[0-9].*)", message = "{error.password.digit}")
+    })
     private String password;
     @NotNull(message = "{error.notnull}")
     @NotEmpty(message = "{error.notempty}")

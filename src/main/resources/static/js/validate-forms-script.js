@@ -19,7 +19,9 @@ $(document).ready(function () {
             password: {
                 required: true,
                 minlength: 5,
-                maxlength: 20
+                maxlength: 20,
+                matchUppercase: "(.*[A-Z].*)",
+                matchNumber: "(.*[0-9].*)"
             },
             email: {
                 required: true,
@@ -28,19 +30,21 @@ $(document).ready(function () {
         },
         messages: {
             username: {
-                required: "| " + "Username field is required",
-                maxlength: jQuery.validator.format("| Max number of characters is 15"),
-                match:  "| " + "Use only english alphabet and numbers"
+                required: "| Username field is required",
+                maxlength: "| Max number of characters is 15",
+                match: "| Use only english alphabet and numbers"
             },
             password: {
                 required: "| " + "Password by field is required",
-                minlength: jQuery.validator.format("| Min number of characters for password is 5"),
-                maxlength: jQuery.validator.format("| Max number of characters is 15")
+                minlength: "| Min number of characters for password is 5",
+                maxlength: "| Max number of characters is 15",
+                matchUppercase: "| Password should contain at least one upper case letter",
+                matchNumber: "| Password should contain at least one number"
             },
             email: {
                 required: "| " + "Email field is required",
-                email: jQuery.validator.format("| Input correct email")
-            },
+                email: "| Input correct email"
+            }
         },
         errorPlacement: function (error, element) {
             var placement = $(element).data('error');
@@ -52,6 +56,14 @@ $(document).ready(function () {
         return false;
     }
 });
-jQuery.validator.addMethod("match", function(value, element, param) {
+jQuery.validator.addMethod("match", function (value, element, param) {
     return value.match(new RegExp("." + param + "$"));
+});
+
+jQuery.validator.addMethod("matchUppercase", function (value, element, param) {
+    return value.match(new RegExp(param));
+});
+
+jQuery.validator.addMethod("matchNumber", function (value, element, param) {
+    return value.match(new RegExp(param));
 });

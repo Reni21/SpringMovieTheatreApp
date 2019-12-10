@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
     private UserRepository userRepo;
+    private PasswordEncoder passwordEncoder;
 
     public User getByUsername(String username) {
         return userRepo.findByUsername(username);
@@ -26,9 +28,8 @@ public class UserService {
     @Transactional
     public User registerUser(SignUpForm signUpForm, Role role) throws UserAlreadyExistException {
         validateUserRequest(signUpForm);
-        //todo: add pass hashing
         User user = new User(signUpForm.getUsername().trim(),
-                signUpForm.getPassword().trim(),
+                passwordEncoder.encode(signUpForm.getPassword().trim()),
                 signUpForm.getEmail().trim(),
                 role);
         return userRepo.save(user);
