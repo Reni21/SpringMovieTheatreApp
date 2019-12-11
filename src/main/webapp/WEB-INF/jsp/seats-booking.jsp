@@ -31,7 +31,7 @@
                             test="${menuDate.isActive() && !requestScope['javax.servlet.forward.request_uri'].contains('movie-session')}">
                         class="active"</c:if>>
                         <a href="/schedule${menuDate.getIsoDate()}">
-                            <fmt:message key="week.day.${menuDate.getDayOfWeek()}"/>
+                            <spring:message code="week.day.${menuDate.getDayOfWeek()}" />
                                 ${menuDate.getFormattedDate()}</a></li>
                 </c:forEach>
             </ul>
@@ -52,14 +52,14 @@
                         <spring:message code="schedule.min"/></div>
                     <div class="seatSelection col-lg-12">
                         <div class="seatsChart col-lg-6">
-                            <div class="screen"><p>SCREEN</p></div>
+                            <div class="screen"><p><spring:message code="seats.booking.screen" /></p></div>
                             <c:set value="${movie.bookedSeats}" var="bookedSeats"/>
                             <div id="session_price" value="${movie.price}"></div>
                             <form id="selectedSeats" method="post" action="/booking">
                                 <input type="hidden" name="movieSessionId" value="${movie.sessionId}">
                                 <c:forEach items="${bookedSeats.entrySet()}" var="entrySetSeats">
                                 <div class="seatRow">
-                                    <div class="seatRowNumber">Row ${entrySetSeats.getKey()}</div>
+                                    <div class="seatRowNumber"><spring:message code="seats.booking.row" /> ${entrySetSeats.getKey()}</div>
                                     <c:forEach items="${entrySetSeats.getValue()}" var="seat">
                                     <div id="${seat.row}_${seat.place}"
                                          role="checkbox"
@@ -86,13 +86,13 @@
                             <c:set var="user" value="${sessionScope['user']}"/>
                             <c:choose>
                                 <c:when test="${user == null || user.getRole().toString() == 'ROLE_USER'}">
-                                    <p>Hall ${movie.hallName} | Selected: <span class="seatsAmount">0 </span>
-                                        <button id="btnClear" class="btn btn-disabled">CLEAR ALL &ensp; <strong
+                                    <p><spring:message code="seats.booking.hall" /> ${movie.hallName} | <spring:message code="seats.booking.selected" />: <span class="seatsAmount">0 </span>
+                                        <button id="btnClear" class="btn btn-disabled"><spring:message code="seats.booking.clear.all" /> &ensp; <strong
                                                 class="btn-disabled">X</strong></button>
                                     </p>
                                 </c:when>
                                 <c:otherwise>
-                                    <p>Hall ${movie.hallName} | Booked seats:
+                                    <p><spring:message code="seats.booking.hall" /> ${movie.hallName} | <spring:message code="seats.booking.booked.seats" />:
                                         <span class="seatsAmount">${movie.getBookedSeatsCount()}</span></p>
                                 </c:otherwise>
                             </c:choose>
@@ -104,25 +104,26 @@
 
                 <div class="checkout col-lg-offset-6">
                     <c:if test="${user == null || user.getRole().toString() == 'ROLE_USER'}">
-                        <span>Total price: </span><span class="txtSubTotal">0.00</span><br/>
+                        <span><spring:message code="seats.booking.total" />: </span><span class="txtSubTotal">0.00</span><br/>
                     </c:if>
                     <c:choose>
                         <c:when test="${user == null}">
                             <h3 style="text-align: center; color: gray; margin: 0; padding-top: 15px;">
-                                Log in to book tickets</h3>
+                                <spring:message code="seats.booking.login.msg" /></h3>
                         </c:when>
                         <c:when test="${user != null && user.getRole().toString() == 'ROLE_ADMIN'}">
                             <!-- Remove movie-session button -->
                             <input id="context" type="hidden" value="${pageContext.request.contextPath}">
                             <button id="btnDelete" name="btnCheckout" class="btn btn-primary primary-active"
-                                    onclick="removeMovieSessionHandler('${movie.sessionId}')">Delete movie session
+                                    onclick="removeMovieSessionHandler('${movie.sessionId}')">
+                                <spring:message code="seats.booking.remove.session" />
                             </button>
                         </c:when>
                         <c:otherwise>
                             <!-- Book ticket button -->
                             <button id="btnCheckout" name="btnCheckout" class="btn btn-primary btn-disabled"
                                     type="submit" form="selectedSeats">
-                                Book tickets
+                                <spring:message code="seats.booking.buy" />
                             </button>
                         </c:otherwise>
                     </c:choose>
@@ -136,5 +137,12 @@
             <script type="text/javascript" src="/js/booking-script.js"></script>
         </c:if>
         <script type="text/javascript" src="/js/delete-movie-session.js"></script>
+        <script type="text/javascript">
+            var msgDictionary = new Map([
+                ["seat", "<spring:message code='tickets.seat'/>"],
+                ["row", "<spring:message code='tickets.row'/>"],
+                ["price", "<spring:message code='admin.input.price'/>"]
+            ]);
+        </script>
     </body>
 </html>

@@ -13,6 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * The {@code UserService} class provides methods for manage information about users
+ * represented by {@link com.theatre.movie.entity.User} class
+ * Properties: <b>userRepo</b>, <b>passwordEncoder</b>,
+ *
+ * @author Hlushchenko Renata
+ * @see com.theatre.movie.repository.UserRepository
+ * @see org.springframework.security.crypto.password.PasswordEncoder
+ */
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
@@ -34,6 +43,13 @@ public class UserService {
         return userRepo.save(user);
     }
 
+    /**
+     * The method validate all required data for new user creation
+     * represented by {@link com.theatre.movie.form.SignUpForm} class
+     *
+     * @param signUpForm - is used for data transfer for create new user request
+     * @throws UserAlreadyExistException if <tt>username</tt> or <tt>email</tt> already exist in db
+     */
     private void validateUserRequest(SignUpForm signUpForm) throws UserAlreadyExistException {
         String username = signUpForm.getUsername();
         if (userRepo.findByUsername(username) != null) {

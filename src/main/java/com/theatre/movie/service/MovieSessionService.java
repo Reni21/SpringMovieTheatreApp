@@ -34,10 +34,27 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+/**
+ * The {@code MovieSessionService} class provides methods for manage information about all movies sessions
+ * represented by {@link com.theatre.movie.entity.MovieSession} class
+ * Properties: <b>bookingDao</b>, <b>hallDao</b>,
+ * <b>movieSessionRepo</b>, <b>bookingRepo</b>, <b>movieRepo</b>,
+ *  <b>hallRepo</b>, <b>MovieSessionService.BREAK_DURATION</b>
+ *
+ * @author Hlushchenko Renata
+ * @see com.theatre.movie.repository.MovieSessionRepository
+ * @see com.theatre.movie.repository.BookingRepository
+ * @see com.theatre.movie.repository.MovieRepository
+ * @see com.theatre.movie.repository.HallRepository
+ */
+
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MovieSessionService {
     private static final Logger LOG = LoggerFactory.getLogger(MovieSessionService.class);
+    /**
+     * Stores break interval between movie sessions
+     */
     private static final int BREAK_DURATION = 15;
 
     private MovieSessionRepository movieSessionRepo;
@@ -63,6 +80,14 @@ public class MovieSessionService {
         return dto;
     }
 
+    /**
+     * The method collect and return movie sessions for required day
+     *
+     * @param date - use for determine the limit for search in db, indicates day for matching with
+     *             <tt>startAt</tt> property in {@link com.theatre.movie.entity.MovieSession} class
+     * @return list of Dtos - stores part of information about all movie sessions for required day
+     * @throws InvalidScheduleDateException from {@link #checkScheduleDateInValidRange(LocalDate date)}
+     */
     @Transactional(readOnly = true)
     public List<MovieSessionsScheduleViewDto> getMovieSessionsScheduleForDate(LocalDate date)
             throws InvalidScheduleDateException {
@@ -75,7 +100,6 @@ public class MovieSessionService {
         LOG.info("Sessions search start from: " + searchFrom + " to: " + searchTo);
         List<MovieSession> sessions = movieSessionRepo.getAllInRange(
                 searchFrom, searchTo);
-        sessions.forEach(System.out::println);
         Map<Movie, List<MovieSession>> sessionsByMovie = sessions.stream()
                 .collect(Collectors.groupingBy(MovieSession::getMovie));
 
@@ -128,6 +152,11 @@ public class MovieSessionService {
 
     }
 
+    /**
+     * @param date - {@link #getMovieSessionsScheduleForDate(LocalDate date)}
+     * @throws InvalidScheduleDateException when required day is out of range:
+     *                                      it less then today and more then 7 days past from today
+     */
     private void checkScheduleDateInValidRange(LocalDate date) throws InvalidScheduleDateException {
         LocalDate now = LocalDate.now();
         if (date.isBefore(now) || date.isAfter(now.plusDays(7))) {
@@ -136,6 +165,13 @@ public class MovieSessionService {
         }
     }
 
+    /**
+     * The method create list of <tt>MovieSessionTimeViewDto</tt> which used on
+     * schedule.jsp & schedule-admin.jsp view pages as set of tags link and attached to one movie card
+     *
+     * @param movieSessions - initial data from which only the necessary will be selected for displaying on view
+     * @return list of dtos - stores all current session hours for one movie card
+     */
     private List<MovieSessionTimeViewDto> mapMovieSessionTimeDtos(List<MovieSession> movieSessions) {
         return movieSessions.stream()
                 .map(session -> new MovieSessionTimeViewDto(
@@ -144,6 +180,14 @@ public class MovieSessionService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Compares the data of all seats in the hall with the booked seats and combines them into
+     * Map<Integer, List<BookedSeatViewDto>> for displaying on view page
+     *
+     * @param allSeats    - list of all seats of required hall
+     * @param bookedSeats - list of seats of required hall that already booked
+     * @return - data for displaying seats of hall on seats-booking.jsp view page
+     */
     private Map<Integer, List<BookedSeatViewDto>> mapBookedSeats(List<Seat> allSeats, Set<Integer> bookedSeats) {
         return allSeats.stream().map(seat -> {
             BookedSeatViewDto dto = new BookedSeatViewDto(seat.getSeatId(), seat.getRow(), seat.getPlace());
@@ -181,6 +225,11 @@ public class MovieSessionService {
 
     }
 
+    /**
+     * The method convert string data of field <tt>hours</tt>, <tt>minutes</tt> and <tt>dateStr</tt>
+     * from {@link com.theatre.movie.form.MovieSessionForm} and method parameter
+     * to {@link java.time.LocalDateTime}
+     */
     private LocalDateTime getSessionStartAt(MovieSessionForm movieSessionForm, String dateStr) {
         LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
         LocalTime time = LocalTime.of(movieSessionForm.getHours(), movieSessionForm.getMinutes());

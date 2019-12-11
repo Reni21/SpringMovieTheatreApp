@@ -8,7 +8,7 @@
 
 <html lang="en">
 <head>
-    <title>Movies</title>
+    <title><spring:message code="admin.movies.label" /></title>
     <c:import url="head-data.jsp"/>
     <!-- Unique css -->
     <link rel="stylesheet" type="text/css" href="css/movies-styles.css">
@@ -39,50 +39,49 @@
 <main>
     <!-- Button -->
     <div class="wrapper btn">
-        <button type="submit" class="myBtn add-movie openModalBtn">Create new movie</button>
+        <button type="submit" class="myBtn add-movie openModalBtn"><spring:message code="admin.movies.modal.button" /></button>
     </div>
     <!-- The Modal for movies-->
     <div id="myModal" class="modal" style="overflow-y: auto !important; padding: 0 !important;">
         <div style="height: 50px"></div>
         <div class="content" style="height: 880px !important; width: 600px">
-            <div class="page-title">Create movie</div>
+            <div class="page-title"><spring:message code="admin.movies.modal.title" /></div>
             <!-- Modal content -->
             <div class="modal-content" style="margin-right: 30px;">
                 <div class="form__container" style="border: 0;">
                     <form class="form__http-properties" action="movie" method="POST">
                         <!-- Fields -->
 
-                        <p id="name_title" class="field-title">Movie Title</p>
+                        <p id="name_title" class="field-title"><spring:message code="admin.movies.form.title.field" />*</p>
                         <p id="err_title" class="errors" style="color: red;"></p>
                         <input type="text" name="title" class="input" data-error="title"/>
 
-                        <p id="name_directed" class="field-title">Directed by</p>
+                        <p id="name_directed" class="field-title"><spring:message code="admin.movies.form.directed.field" />*</p>
                         <p id="err_directed" class="errors" style="color: red;"></p>
                         <input type="text" name="directed" class="input" data-error="directed"/>
 
-                        <p id="name_duration" class="field-title">Duration</p>
+                        <p id="name_duration" class="field-title"><spring:message code="admin.movies.form.duration.field" />*</p>
                         <p id="err_duration" class="errors" style="color: red;"></p>
                         <input type="number" name="duration" class="input" data-error="duration"/>
 
-                        <p id="name_cover" class="field-title">Cover link</p>
+                        <p id="name_cover" class="field-title"><spring:message code="admin.movies.form.cover.field" />* <i style="font-weight: normal; font-size: 13px">(<spring:message code="admin.movies.link" /> http)</i></p>
                         <p id="err_cover" class="errors" style="color: red;"></p>
                         <input type="link" name="cover" class="input" data-error="cover"/>
 
-                        <p id="name_bg" class="field-title">Background link</p>
+                        <p id="name_bg" class="field-title"><spring:message code="admin.movies.form.bg.field" />* <i style="font-weight: normal; font-size: 13px">(<spring:message code="admin.movies.link" /> http)</i></p>
                         <p id="err_bg" class="errors" style="color: red;"></p>
                         <input type="link" name="bg" class="input" data-error="bg"/>
 
-                        <p id="name_trailer" class="field-title">Trailer link</p>
+                        <p id="name_trailer" class="field-title"><spring:message code="admin.movies.form.trailer.field" />* <i style="font-weight: normal; font-size: 13px">(<spring:message code="admin.movies.link" /> http)</i></p>
                         <p id="err_trailer" class="errors" style="color: red;"></p>
                         <input type="link" name="trailer" class="input" data-error="trailer"/>
 
                         <!-- Buttons -->
                         <button type="submit" class="signinbutton"
-                                style="cursor: pointer;margin-right: 0 !important; margin-left: 0 !important;">Create
+                                style="cursor: pointer;margin-right: 0 !important; margin-left: 0 !important;"><spring:message code="admin.movies.modal.save" />
                         </button>
                         <button type="button" class="close"
-                                style="width: 452px; margin-right: 0 !important; margin-left: 0 !important;">Cancel and
-                            Close
+                                style="width: 452px; margin-right: 0 !important; margin-left: 0 !important;"><spring:message code="admin.movies.modal.close" />
                         </button>
                     </form>
                 </div>
@@ -90,12 +89,7 @@
         </div>
         <div style="height: 50px"></div>
     </div>
-
-    <!--
-    ===============================================================================================
-    1я карточка с фильмами
-    ===============================================================================================
--->
+    <!-- The Modal for movies-->
     <c:forEach items="${movies}" var="movie">
         <div id="card_${movie.movieId}" class="movie-card">
             <div class="movie-card__container">
@@ -119,8 +113,7 @@
                         <spring:message code="schedule.min"/>
                     </p>
                     <a class="tag" onclick="deleteMovieHandler(${movie.movieId})"
-                       style="border-radius: 25px;padding: 10px 25px;font-size: 18px;line-height: 28px;float: right;">Remove
-                        movie</a>
+                       style="border-radius: 25px;padding: 10px 25px;font-size: 18px;line-height: 28px;float: right;"><spring:message code="admin.movies.remove.movie" /></a>
                 </div>
             </div>
         </div>
@@ -130,6 +123,14 @@
 <script src="js/jquery/jquery-3.4.1.min.js"></script>
 <script src="js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/js/movie-creation-modal.js"></script>
+    <script type="text/javascript">
+        var msgDictionary = new Map([
+            ["remove", "<spring:message code="admin.movies.remove.movie" />"],
+            ["min", "<spring:message code="schedule.min"/>"],
+            ["duration", "<spring:message code="schedule.duration"/>"],
+            ["empty", "<spring:message code="admin.movies.modal.empty"/>"]
+        ]);
+    </script>
 </body>
 </html>
 

@@ -4,7 +4,7 @@ import com.theatre.movie.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
- @AllArgsConstructor
+@AllArgsConstructor
 @Getter
 public class AuthUser {
     public String username;

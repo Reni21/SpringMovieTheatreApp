@@ -18,6 +18,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code BookingService} class provides methods for manage user bookings/tickets purchases
+ * represented by {@link com.theatre.movie.entity.Booking} class
+ * Properties: <b>bookingRepo</b>, <b>userRepo</b>, <b>seatRepo</b>, <b>movieSessionRepo</b>
+ *
+ * @author Hlushchenko Renata
+ * @see com.theatre.movie.repository.BookingRepository
+ * @see com.theatre.movie.repository.UserRepository
+ * @see com.theatre.movie.repository.SeatRepository
+ * @see com.theatre.movie.repository.MovieSessionRepository
+ */
+
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class BookingService {
@@ -27,6 +39,12 @@ public class BookingService {
     private SeatRepository seatRepo;
     private MovieSessionRepository movieSessionRepo;
 
+    /**
+     *
+     * @param bookedSeatsForm - is used for data transfer for book tickets request
+     *      *            represented by {@link com.theatre.movie.form.BookedSeatsForm} class
+     * @param username - username of user which want to book tickets
+     */
     @Transactional
     public void createBooking(BookedSeatsForm bookedSeatsForm, String username) {
         Integer movieSessionId = Integer.parseInt(bookedSeatsForm.getMovieSessionId());
@@ -43,6 +61,14 @@ public class BookingService {
         }
     }
 
+    /**
+     * Return information about all users purchases, which has movie session
+     * {@link com.theatre.movie.entity.MovieSession} with startAt property >= current time now
+     *
+     * @param username - username, is used for search data in db
+     * @return list of Dtos - stores information about booking which will be displayed
+     * for registered user on user-tickets.jsp
+     */
     @Transactional(readOnly = true)
     public List<BookingViewDto> getActualUsersBookingById(String username) {
         LOG.info("Get actual booking for user username=" + username);
@@ -58,6 +84,10 @@ public class BookingService {
         return dtos;
     }
 
+    /***
+     * Extract only necessary data from <tt>booking</tt> and return it in dto
+     * for displaying on view page
+     */
     private BookingViewDto mapBookingViewDto(Booking booking) {
         MovieSession movieSession = booking.getMovieSession();
         Movie movie = booking.getMovieSession().getMovie();

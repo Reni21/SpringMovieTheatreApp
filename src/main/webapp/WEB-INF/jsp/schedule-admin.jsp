@@ -8,7 +8,7 @@
 
 <html lang="en">
 <head>
-    <title>Movies schedule</title>
+    <title><spring:message code="schedule.label" /></title>
     <c:import url="head-data.jsp"/>
     <!-- Unique css -->
     <link rel="stylesheet" type="text/css" href="css/schedule-admin-styles.css">
@@ -38,7 +38,7 @@
     <!-- - - - - - - - The Modal for movies - - - - - - - -->
     <div id="myModal" class="modal">
         <div class="content">
-            <div class="page-title">Login</div>
+            <div class="page-title"><spring:message code="schedule.admin.modal.title" /></div>
             <!-- Modal content -->
             <div class="modal-content">
                 <form id="selectedMovies" method="post">
@@ -47,9 +47,9 @@
 
             <!-- Modal buttons -->
             <button id="btnCheckout" name="confirm" class="signinbutton" type="submit" form="selectedMovies">
-                Confirm
+            <spring:message code="schedule.admin.modal.select" />
             </button>
-            <button class="close">Cancel and close</button>
+            <button class="close"><spring:message code="schedule.admin.modal.close" /></button>
         </div>
     </div>
     <!-- - - - - - - - The Modal for movies - - - - - - - -->
@@ -65,7 +65,7 @@
                     <div class="movie-cover">
                         <!-- Delete pin movie button -->
                         <button class="btn delete" onclick="removePinHandler('${movie.movieId}')">
-                            Remove movie
+                            <spring:message code="schedule.admin.unpin.movie" />
                         </button>
                     </div>
 
@@ -115,6 +115,16 @@
         ["priceRequired", "<spring:message code='error.price.required'/>"],
         ["priceNumber", "<spring:message code='error.price.number'/>"],
         ["priceMin", "<spring:message code='error.price.min'/>"]
+    ]);
+    var msgDictionary = new Map([
+        ["duration", "<spring:message code="schedule.duration"/>"],
+        ["min", "<spring:message code="schedule.min"/>"],
+        ["mm", "<spring:message code="admin.input.mm"/>"],
+        ["hh", "<spring:message code="admin.input.hh"/>"],
+        ["price", "<spring:message code="admin.input.price"/>"],
+        ["session", "<spring:message code="admin.add.session"/>"],
+        ["empty", "<spring:message code="admin.movies.modal.empty"/>"],
+        ["unpin", "<spring:message code="schedule.admin.unpin.movie"/>"]
     ]);
 </script>
 </body>

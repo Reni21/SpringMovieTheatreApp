@@ -21,6 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code MovieService} class provides methods for manage information about all  movies
+ * represented by {@link com.theatre.movie.entity.Movie} class
+ * Properties: <b>movieRepo</b>, <b>movieSessionRepo</b>,
+ * <b>bookingRepo</b>
+ *
+ * @author Hlushchenko Renata
+ * @see com.theatre.movie.repository.MovieRepository;
+ * @see com.theatre.movie.repository.MovieSessionRepository;
+ * @see com.theatre.movie.repository.BookingRepository;
+ */
+
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MovieService {
@@ -29,6 +41,11 @@ public class MovieService {
     private MovieSessionRepository movieSessionRepo;
     private BookingRepository bookingRepo;
 
+    /**
+     * @param movieForm - is used for data transfer for create new movie request
+     *            represented by {@link com.theatre.movie.form.MovieForm} class
+     * @return {@link com.theatre.movie.entity.Movie}
+     */
     @Transactional
     public Movie createMovie(MovieForm movieForm) {
         Movie movie = new Movie(movieForm.getTitle(), movieForm.getDirected(), movieForm.getDuration());
@@ -38,6 +55,12 @@ public class MovieService {
         return movieRepo.save(movie);
     }
 
+    /**
+     * Return part of data about movie. Will be displaying
+     * for admin-user on admin-movies.jsp
+     *
+     * @return list of Dtos - stores part of information about all movies
+     */
     @Transactional(readOnly = true)
     public List<MovieSimpleViewDto> getAllSimpleView(){
         LOG.info("Extract simple movie view data");
@@ -50,6 +73,13 @@ public class MovieService {
         return dtos;
     }
 
+    /**
+     * The method extract movies for display on required <tt>page</tt>
+     *
+     * @param page          - number of current page
+     * @param moviesPerPage - number of movies card per page
+     * @return - store extracted movies for required <tt>page</tt>
+     */
     @Transactional(readOnly = true)
     public PaginatedData<Movie> getAll(int page, int moviesPerPage) {
         LOG.info("Extract all movies");
@@ -62,6 +92,13 @@ public class MovieService {
         return new PaginatedData<>(movies, pagesCount, page);
     }
 
+    /**
+     * The method delete required movie and all movie sessions which mapped on it
+     *
+     * @param movieId - movie id, is used for search data in db
+     * @throws MovieRemovalException if some actual movie sessions which has mapped for
+     *                               required movie has booking
+     */
     @Transactional
     public void deleteMovieAndSessions(int movieId) {
             boolean bookingExists = bookingRepo.isBookingForMovieExist(movieId);

@@ -9,7 +9,7 @@
 
 <html lang="en">
     <head>
-        <title>Movies schedule</title>
+        <title><spring:message code="schedule.label" /></title>
         <c:import url="head-data.jsp"/>
         <!-- Unique css -->
         <link rel="stylesheet" type="text/css" href="css/schedule-styles.css">
@@ -38,7 +38,7 @@
         -->
             <c:if test="${sessions.size() == 0}">
                 <h2 style="text-align: center; color: gray; padding-top: 150px;">
-                    No movies sessions in this date.<br> Check out it later.</h2>
+                    <spring:message code="schedule.empty.msg.part.one" /><br> <spring:message code="schedule.empty.msg.part.two" /></h2>
             </c:if>
             <c:forEach items="${sessions}" var="session">
                 <div class="movie-card">

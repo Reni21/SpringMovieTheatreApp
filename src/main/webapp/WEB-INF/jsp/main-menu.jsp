@@ -20,21 +20,21 @@
                         <td>
                             <ul class="first-lvl__main-menu">
                                 <c:set var="name" value='${activeTab}'/>
-                                <li <c:if test="${name == 'main'}">class="active"</c:if>><a href="/"><spring:message
-                                        code="main.menu.home"/></a>
+                                <li <c:if test="${name == 'main'}">class="active"</c:if>>
+                                    <a href="/"><spring:message code="main.menu.home"/></a>
                                 </li>
                                 <li <c:if test="${name == 'schedule'}">class="active"</c:if>>
                                     <a href="/schedule?date=${currentDate}"><spring:message code="main.menu.schedule"/></a>
                                 </li>
                                 <c:set var="user" value="${sessionScope['user']}"/>
                                 <c:if test="${user != null && 'ROLE_ADMIN'.equals(user.getRole().toString())}">
-                                    <li <c:if test="${name == 'movies'}">class="active"</c:if>><a
-                                            href="/movie?page=1">MOVIES</a>
+                                    <li <c:if test="${name == 'movies'}">class="active"</c:if>>
+                                        <a href="/movie?page=1"><spring:message code="main.menu.movies" /></a>
                                     </li>
                                 </c:if>
                                 <c:if test="${user != null && 'ROLE_USER'.equals(user.getRole().toString())}">
-                                    <li <c:if test="${name == 'tickets'}">class="active"</c:if>><a href="/tickets">MY
-                                        TICKETS</a>
+                                    <li <c:if test="${name == 'tickets'}">class="active"</c:if>>
+                                        <a href="/tickets"><spring:message code="main.menu.tickets" /></a>
                                     </li>
                                 </c:if>
 

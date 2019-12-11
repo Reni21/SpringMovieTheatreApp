@@ -27,10 +27,10 @@ $(".seatNumber").click(
                 // getting values from Seat
                 var thisId = $(this).attr('id');
                 var id = thisId.split("_");
-                var seatDetails = "Row: " + id[0] + " &ensp;| &ensp;Seat: " + id[1] + " &ensp;| &ensp;Price: " + price;
+                var seatDetails = msgDictionary.get('row') + ": " + id[0] + " &ensp;| &ensp;" + msgDictionary.get('seat') + ": " + id[1] + " &ensp;| &ensp;" + msgDictionary.get('price') + ": " + price;
 
                 // Adding this seat to the list
-                var seatDetails = "Row: " + id[0] + " &ensp;| &ensp;Seat: " + id[1] + " &ensp;| &ensp;Price: " + price;
+                var seatDetails = msgDictionary.get('row') + ": " + id[0] + " &ensp;| &ensp;" + msgDictionary.get('seat') + ": " + id[1] + " &ensp;| &ensp;" + msgDictionary.get('price') + ": " + price;
                 $("#seatsList").append('<li value=' + $(this).attr('value') + ' class=' + thisId + '>' + seatDetails + "  " +
                     "<button id='remove:" + thisId + "' class='btn btn-default btn-sm removeSeat' value='" + $(this).attr('value') + "'><strong>X</strong></button></li>");
                 $(this).addClass("seatSelected");
@@ -60,7 +60,7 @@ $(".seatNumber").hover(
         if (!$(this).hasClass("seatUnavailable")) {
             var id = $(this).attr('id');
             var id = id.split("_");
-            var tooltip = "Row: " + id[0] + "    |    Seat:" + id[1] + "    |    Price: " + price;
+            var tooltip = msgDictionary.get('row') + ": " + id[0] + "    |    " + msgDictionary.get('seat') + ":" + id[1] + "    |    " + msgDictionary.get('price') + ": " + price;
 
             $(this).prop('title', tooltip);
         } else {
